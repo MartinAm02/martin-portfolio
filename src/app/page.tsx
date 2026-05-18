@@ -1,14 +1,13 @@
 import Link from "next/link";
+import { ChatPanel } from "@/components/ChatPanel";
 import {
   certifications,
   courses,
   demos,
-  heroContent,
   mobileNavigation,
   navigation,
   profile,
   projects,
-  suggestions,
   uiText
 } from "@/lib/data";
 
@@ -96,30 +95,6 @@ function SectionHeader({ title, compact = false }: { title: string; compact?: bo
         {compact ? uiText.sectionLinks.compact : uiText.sectionLinks.full}
       </span>
     </div>
-  );
-}
-
-function Hero({ mobile = false }: { mobile?: boolean }) {
-  return (
-    <section className={mobile ? "hero mobile-spacer" : "hero"} id="chat">
-      <div className="hero-ey">{heroContent.eyebrow}</div>
-      <h1 className="hero-h">
-        {heroContent.titlePrefix}<em>{heroContent.titleAccent}</em>
-        {!mobile && <><br />{heroContent.titleSuffix}</>}
-      </h1>
-      <p className="hero-p">{heroContent.description}</p>
-      <div className={mobile ? "mobile-sugs" : "sugs"}>
-        {suggestions.map((suggestion, index) => (
-          <div className={mobile ? "sug mobile-sug" : "sug"} key={suggestion.text}>
-            {mobile && <div className="mobile-icon">{index + 1}</div>}
-            <div>
-              <div className="sug-l">{suggestion.label}</div>
-              <div className="sug-t">{suggestion.text}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
   );
 }
 
@@ -276,17 +251,6 @@ function MobileDemosSection() {
   );
 }
 
-function MobileInput() {
-  return (
-    <div className="m-input-wrap">
-      <div className="m-input-row">
-        <input className="m-input" placeholder="Ask me anything..." readOnly />
-        <button className="m-send" aria-label="Send message" type="button">↑</button>
-      </div>
-    </div>
-  );
-}
-
 function BottomNav() {
   const icons = ["◆", "▦", "↓", "◎"];
 
@@ -319,7 +283,7 @@ export default function Home() {
               <LanguageToggle />
             </div>
             <div className="scroll">
-              <Hero />
+              <ChatPanel />
               <ProjectsSection />
               <CertificationsSection />
               <LiveDemosSection />
@@ -330,12 +294,11 @@ export default function Home() {
         <div className="mobile-layout">
           <MobileHeader />
           <div className="m-scroll">
-            <Hero mobile />
+            <ChatPanel mobile />
             <ProjectsSection />
             <CertificationsSection />
             <MobileDemosSection />
           </div>
-          <MobileInput />
           <BottomNav />
         </div>
       </div>

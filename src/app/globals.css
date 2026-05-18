@@ -397,8 +397,22 @@ button, input {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 7px;
+  cursor: pointer;
+  display: block;
   padding: 10px 12px;
   text-align: left;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.sug:hover:not(:disabled) {
+  border-color: rgba(232, 160, 48, 0.35);
+  transform: translateY(-1px);
+}
+
+.sug:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .sug-l {
@@ -414,6 +428,88 @@ button, input {
   color: var(--text2);
   font-size: 10px;
   line-height: 1.4;
+}
+
+.chat-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  margin: 14px auto 0;
+  max-width: 520px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.chat-message {
+  border-radius: 8px;
+  color: var(--text2);
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 9px 10px;
+}
+
+.chat-message.assistant {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background: var(--amber-dim);
+  color: var(--text);
+  max-width: 86%;
+}
+
+.chat-form {
+  align-items: center;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+}
+
+.chat-input {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  color: var(--text);
+  flex: 1;
+  font-size: 12px;
+  min-width: 0;
+  outline: none;
+  padding: 9px 12px;
+}
+
+.chat-input:focus {
+  border-color: rgba(232, 160, 48, 0.45);
+}
+
+.chat-send {
+  background: var(--amber);
+  border: 1px solid var(--amber);
+  border-radius: 999px;
+  color: #1a0e00;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 9px 12px;
+}
+
+.chat-send:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .section-header {
