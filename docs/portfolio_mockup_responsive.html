@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Epilogue:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0d0d0d;--bg2:#141414;--bg3:#1a1a1a;--bg4:#1f1f1f;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#f0ede8;--text2:#8a8680;--text3:#4a4846;
+  --amber:#e8a030;--amber2:#f5b84a;
+  --amber-dim:rgba(232,160,48,0.1);--amber-dim2:rgba(232,160,48,0.05);
+  --green:#4aaa78;--green-dim:rgba(74,170,120,0.12);
+  --blue:#4a90e8;--blue-dim:rgba(74,144,232,0.1);
+  --purple:#9b72e8;--purple-dim:rgba(155,114,232,0.1);
+  --serif:'DM Serif Display',serif;
+  --sans:'Epilogue',sans-serif;
+  --mono:'DM Mono',monospace;
+  --r:10px;--r-sm:6px;
+}
+body{font-family:var(--sans);background:#0a0a0a;min-height:100vh;padding:20px 16px;}
+
+/* ── Toggle controls ── */
+.toggle-bar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:20px;
+}
+.toggle-btn{
+  font-size:12px;font-family:var(--mono);
+  padding:7px 18px;border-radius:20px;
+  border:1px solid var(--border2);
+  background:var(--bg2);color:var(--text2);
+  cursor:pointer;transition:all .2s;
+}
+.toggle-btn.active{background:var(--amber);color:#1a0e00;border-color:var(--amber);}
+
+/* ── Browser chrome ── */
+.browser{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 32px 64px rgba(0,0,0,0.55);
+  margin:0 auto;
+  transition:max-width .4s cubic-bezier(.4,0,.2,1);
+}
+.browser.desktop{max-width:1060px;}
+.browser.mobile{max-width:375px;}
+
+.bar{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:10px 14px;display:flex;align-items:center;gap:10px;
+}
+.dots{display:flex;gap:5px;}
+.dot{width:10px;height:10px;border-radius:50%;}
+.url{
+  flex:1;background:var(--bg4);border:1px solid var(--border);
+  border-radius:5px;padding:4px 10px;
+  font-family:var(--mono);font-size:10px;color:var(--text3);
+  display:flex;align-items:center;gap:5px;
+}
+.url span{color:var(--text2);}
+
+/* ─────────────── DESKTOP LAYOUT ─────────────── */
+.desktop-layout{display:grid;grid-template-columns:255px 1fr;height:660px;}
+
+.sidebar{
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:22px 18px;gap:22px;
+  overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);}
+
+.avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),#c47820);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:20px;color:#1a0e00;
+  position:relative;margin:0 auto 10px;
+}
+.avatar::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:1px solid var(--amber);opacity:.3;}
+
+.p-name{font-family:var(--serif);font-size:17px;text-align:center;color:var(--text);}
+.p-role{font-size:10px;color:var(--amber);letter-spacing:.08em;text-transform:uppercase;font-weight:600;text-align:center;margin-top:2px;}
+.slabel{font-size:9px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px;}
+.nav{display:flex;flex-direction:column;gap:2px;}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:5px;font-size:12px;color:var(--text2);}
+.ni.on{background:var(--amber-dim);color:var(--amber);}
+.ni.cert-on{background:var(--blue-dim);color:var(--blue);}
+.ni-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.tags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-size:9px;font-family:var(--mono);color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:2px 6px;}
+.tag.hi{color:var(--amber);border-color:rgba(232,160,48,.25);background:var(--amber-dim2);}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pu 2s ease-in-out infinite;flex-shrink:0;}
+@keyframes pu{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+.main-d{display:flex;flex-direction:column;overflow:hidden;}
+.topbar{border-bottom:1px solid var(--border);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);}
+.tbar-title{font-family:var(--serif);font-size:15px;color:var(--text);}
+.tbar-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+.lang{display:flex;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px;}
+.lb{font-size:9px;font-weight:600;color:var(--text3);border:none;background:none;padding:3px 8px;border-radius:3px;}
+.lb.on{background:var(--amber);color:#1a0e00;}
+
+.scroll{flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:24px;}
+.scroll::-webkit-scrollbar{width:3px;}
+.scroll::-webkit-scrollbar-thumb{background:var(--border2);}
+
+/* Hero */
+.hero{text-align:center;padding:12px 0 4px;}
+.hero-ey{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:8px;}
+.hero-h{font-family:var(--serif);font-size:30px;line-height:1.2;color:var(--text);margin-bottom:8px;}
+.hero-h em{font-style:italic;color:var(--amber);}
+.hero-p{font-size:12px;color:var(--text2);line-height:1.6;max-width:380px;margin:0 auto 16px;}
+.sugs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;max-width:520px;margin:0 auto;}
+.sug{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;text-align:left;}
+.sug-l{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);font-weight:600;margin-bottom:3px;}
+.sug-t{font-size:10px;color:var(--text2);line-height:1.4;}
+
+/* Section */
+.sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px;}
+.st{font-family:var(--serif);font-size:18px;color:var(--text);}
+.sl{font-size:10px;color:var(--amber);font-family:var(--mono);}
+
+/* Cert area */
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.cc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;overflow:hidden;position:relative;}
+.cc.feat{border-color:rgba(232,160,48,.3);}
+.cc.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--amber2),transparent);}
+.cc-in{padding:14px;}
+.cc-top{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.cc-logo{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.cc-iss{font-size:10px;color:var(--text2);}
+.cc-name{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:7px;}
+.cc-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.badge{font-size:9px;font-weight:600;padding:2px 7px;border-radius:3px;font-family:var(--mono);}
+.b-amber{background:var(--amber-dim);color:var(--amber);}
+.b-green{background:var(--green-dim);color:var(--green);}
+.b-blue{background:var(--blue-dim);color:var(--blue);}
+.b-purple{background:var(--purple-dim);color:var(--purple);}
+.b-gray{background:var(--bg3);color:var(--text3);border:1px solid var(--border);}
+.cc-date{font-size:9px;color:var(--text3);font-family:var(--mono);}
+.prog{margin-top:8px;}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:4px;}
+.prog-row span{font-size:9px;color:var(--text3);}
+.prog-row strong{font-size:9px;color:var(--amber);}
+.prog-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--amber);border-radius:2px;}
+
+.courses{display:flex;flex-direction:column;gap:7px;}
+.course-slabel{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:600;margin-bottom:3px;}
+.coc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;}
+.cod{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.co-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;line-height:1.3;}
+.co-plat{font-size:10px;color:var(--text2);}
+.co-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
+
+/* Demo strip */
+.demo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.dc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px;}
+.dc-tag{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);font-weight:600;margin-bottom:5px;}
+.dc-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.dc-sub{font-size:10px;color:var(--text2);margin-bottom:8px;}
+.dc-tags{display:flex;gap:4px;flex-wrap:wrap;}
+
+
+/* ─────────────── MOBILE LAYOUT ─────────────── */
+.mobile-layout{display:none;flex-direction:column;height:700px;}
+
+.m-header{
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);flex-shrink:0;
+}
+.m-profile{display:flex;align-items:center;gap:10px;}
+.m-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),#c47820);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:13px;color:#1a0e00;
+  position:relative;
+}
+.m-avatar::after{content:'';position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--amber);opacity:.3;}
+.m-name{font-family:var(--serif);font-size:14px;color:var(--text);}
+.m-role{font-size:9px;color:var(--amber);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.m-lang{display:flex;gap:2px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px;}
+.mlb{font-size:9px;font-weight:600;color:var(--text3);border:none;background:none;padding:3px 7px;border-radius:3px;}
+.mlb.on{background:var(--amber);color:#1a0e00;}
+
+.m-scroll{flex:1;overflow-y:auto;padding:16px;}
+.m-scroll::-webkit-scrollbar{display:none;}
+
+/* Mobile hero */
+.m-hero{text-align:center;margin-bottom:20px;}
+.m-ey{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:7px;}
+.m-h{font-family:var(--serif);font-size:26px;line-height:1.2;color:var(--text);margin-bottom:7px;}
+.m-h em{font-style:italic;color:var(--amber);}
+.m-p{font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:14px;}
+.m-sugs{display:flex;flex-direction:column;gap:6px;}
+.m-sug{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;display:flex;gap:10px;align-items:center;}
+.m-sug-icon{font-size:14px;flex-shrink:0;}
+.m-sug-l{font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--amber);font-weight:600;}
+.m-sug-t{font-size:11px;color:var(--text2);line-height:1.3;}
+
+/* Mobile sections */
+.m-sec{margin-bottom:20px;}
+.m-sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:11px;}
+.m-st{font-family:var(--serif);font-size:17px;color:var(--text);}
+.m-sl{font-size:10px;color:var(--amber);font-family:var(--mono);}
+
+/* Mobile cert card */
+.m-cc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;overflow:hidden;position:relative;margin-bottom:8px;}
+.m-cc.feat{border-color:rgba(232,160,48,.3);}
+.m-cc.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--amber2),transparent);}
+.m-cc-in{padding:14px;}
+.m-cc-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.m-cc-logo{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.m-cc-iss{font-size:10px;color:var(--text2);}
+.m-cc-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.3;}
+.m-cc-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+
+/* Mobile course */
+.m-coc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:7px;}
+
+/* Mobile demo */
+.m-dc{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:7px;}
+.m-dc-icon{width:36px;height:36px;border-radius:7px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.m-dc-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.m-dc-sub{font-size:10px;color:var(--text2);}
+
+/* Mobile input */
+.m-input-wrap{
+  flex-shrink:0;padding:10px 14px;border-top:1px solid var(--border);background:var(--bg);
+}
+.m-input-row{display:flex;gap:8px;background:var(--bg2);border:1px solid var(--border2);border-radius:22px;padding:8px 14px;align-items:center;}
+.m-input{flex:1;background:none;border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--text3);}
+.m-send{width:30px;height:30px;border-radius:50%;background:var(--amber);border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;color:#1a0e00;}
+
+/* Mobile bottom nav */
+.m-nav{
+  flex-shrink:0;
+  background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;
+  padding:8px 0 10px;
+}
+.m-ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.m-ni-icon{font-size:17px;color:var(--text3);}
+.m-ni.on .m-ni-icon{color:var(--amber);}
+.m-ni.cert-on .m-ni-icon{color:var(--blue);}
+.m-ni-label{font-size:9px;color:var(--text3);font-family:var(--mono);}
+.m-ni.on .m-ni-label{color:var(--amber);}
+.m-ni.cert-on .m-ni-label{color:var(--blue);}
+
+/* State control */
+.desktop-layout{display:grid;}
+.mobile-layout{display:none;}
+.browser.mobile .desktop-layout{display:none!important;}
+.browser.mobile .mobile-layout{display:flex!important;}
+</style>
+</head>
+<body>
+
+<!-- Toggle -->
+<div class="toggle-bar">
+  <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-right:4px;">Preview:</div>
+  <button class="toggle-btn active" onclick="setView('desktop')">🖥 Desktop</button>
+  <button class="toggle-btn" onclick="setView('mobile')">📱 Mobile</button>
+</div>
+
+<div class="browser desktop" id="browser">
+  <!-- Browser bar -->
+  <div class="bar">
+    <div class="dots">
+      <div class="dot" style="background:#ff5f57;"></div>
+      <div class="dot" style="background:#febc2e;"></div>
+      <div class="dot" style="background:#28c840;"></div>
+    </div>
+    <div class="url">🔒 <span>martinalvarez.dev</span></div>
+    <div style="font-size:10px;color:var(--text3);font-family:var(--mono);">Vercel ▲</div>
+  </div>
+
+  <!-- ════ DESKTOP ════ -->
+  <div class="desktop-layout">
+    <aside class="sidebar">
+      <div>
+        <div class="avatar">M</div>
+        <div class="p-name">Martín Alvarez Martinez</div>
+        <div class="p-role">Data Scientist · Engineer</div>
+      </div>
+      <div>
+        <div class="slabel">Open to</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="color:var(--green);font-size:9px;">●</span>Data Eng. roles</div>
+          <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="color:var(--green);font-size:9px;">●</span>ML consulting</div>
+          <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="color:var(--green);font-size:9px;">●</span>Health data projects</div>
+        </div>
+      </div>
+      <div>
+        <div class="slabel">Navigate</div>
+        <div class="nav">
+          <div class="ni on"><div class="ni-dot"></div>AI Chat</div>
+          <div class="ni"><div class="ni-dot"></div>Live Demos</div>
+          <div class="ni cert-on"><div class="ni-dot"></div>Certs & Courses</div>
+          <div class="ni"><div class="ni-dot"></div>Architecture</div>
+        </div>
+      </div>
+      <div>
+        <div class="slabel">Stack</div>
+        <div class="tags">
+          <span class="tag hi">Python</span><span class="tag hi">Rust</span><span class="tag hi">TypeScript</span>
+          <span class="tag">AWS</span><span class="tag">Spark</span><span class="tag">SQL</span>
+          <span class="tag">React</span><span class="tag">Power BI</span><span class="tag">Tauri</span>
+        </div>
+      </div>
+      <div style="margin-top:auto;display:flex;align-items:center;gap:6px;">
+        <div class="pulse"></div>
+        <div style="font-size:10px;color:var(--text2);">AI tools active · EN / ES</div>
+      </div>
+    </aside>
+
+    <div class="main-d">
+      <div class="topbar">
+        <div>
+          <div class="tbar-title">Portfolio</div>
+          <div class="tbar-sub">Data Scientist · Engineer · Consultor · Builder</div>
+        </div>
+        <div class="lang"><div class="lb on">EN</div><div class="lb">ES</div></div>
+      </div>
+      <div class="scroll">
+
+        <!-- Hero -->
+        <div class="hero">
+          <div class="hero-ey">Interactive Portfolio · AI-Powered</div>
+          <h1 class="hero-h">Ask me <em>anything.</em><br>I use real tools.</h1>
+          <p class="hero-p">This AI knows Martín's work, stack & projects — and fetches live data on demand.</p>
+          <div class="sugs">
+            <div class="sug"><div class="sug-l">Profile</div><div class="sug-t">Tell me about Martín and what makes him stand out</div></div>
+            <div class="sug"><div class="sug-l">Live Tool</div><div class="sug-t">What's the weather right now in Mexico City?</div></div>
+            <div class="sug"><div class="sug-l">Live Tool</div><div class="sug-t">Tell me the most relevant tech & data news today</div></div>
+            <div class="sug"><div class="sug-l">Agentic AI</div><div class="sug-t">Fetch a live data point from a public API</div></div>
+          </div>
+        </div>
+
+        <!-- Certs & Courses -->
+        <div>
+          <div class="sh"><div class="st">Certifications & Courses</div><div class="sl">view all →</div></div>
+          <div class="cert-grid">
+            <div class="cc feat">
+              <div class="cc-in">
+                <div class="cc-top">
+                  <div class="cc-logo" style="background:rgba(255,153,0,.15);color:#ff9900;">AWS</div>
+                  <div class="cc-iss">Amazon Web Services</div>
+                </div>
+                <div class="cc-name">AWS Cloud Practitioner Essentials</div>
+                <div class="cc-meta">
+                  <div class="badge b-amber">⏳ In progress</div>
+                  <div class="cc-date">Expected soon</div>
+                </div>
+                <div class="prog">
+                  <div class="prog-row"><span>Progress</span><strong>85%</strong></div>
+                  <div class="prog-track"><div class="prog-fill" style="width:85%;"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cc" style="border-style:dashed;">
+              <div class="cc-in" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:100px;gap:6px;">
+                <div style="font-size:20px;color:var(--text3);">+</div>
+                <div style="font-size:10px;color:var(--text3);font-family:var(--mono);text-align:center;">Next cert<br>coming soon</div>
+              </div>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course-slabel">Courses</div>
+            <div class="coc">
+              <div class="cod" style="background:var(--blue);"></div>
+              <div>
+                <div class="co-name">Data Engineering Zoomcamp</div>
+                <div class="co-plat">DataTalks.Club</div>
+                <div class="co-tags"><span class="badge b-blue">Completed</span><span class="tag">Spark</span><span class="tag">Kafka</span><span class="tag">dbt</span></div>
+              </div>
+            </div>
+            <div class="coc">
+              <div class="cod" style="background:var(--purple);"></div>
+              <div>
+                <div class="co-name">Machine Learning Specialization</div>
+                <div class="co-plat">Coursera · Andrew Ng</div>
+                <div class="co-tags"><span class="badge b-purple">Completed</span><span class="tag">ML</span><span class="tag">Neural Nets</span></div>
+              </div>
+            </div>
+            <div class="coc">
+              <div class="cod" style="background:var(--amber);"></div>
+              <div>
+                <div class="co-name">Rust — The Complete Guide</div>
+                <div class="co-plat">Udemy</div>
+                <div class="co-tags"><span class="badge b-amber">In progress</span><span class="tag">Rust</span><span class="tag">Tauri</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Demos -->
+        <div>
+          <div class="sh"><div class="st">Live Demos</div><div class="sl">view all →</div></div>
+          <div class="demo-strip">
+            <div class="dc">
+              <div class="dc-tag">ML · Classification</div>
+              <div class="dc-title">Iris Classifier</div>
+              <div class="dc-sub">Logistic Regression, real-time probs</div>
+              <div class="dc-tags"><span class="tag hi">Python</span><span class="tag">sklearn</span></div>
+            </div>
+            <div class="dc">
+              <div class="dc-tag">Analytics · Ops</div>
+              <div class="dc-title">ABC Analysis</div>
+              <div class="dc-sub">Pareto inventory segmentation</div>
+              <div class="dc-tags"><span class="tag hi">Python</span><span class="tag">pandas</span></div>
+            </div>
+            <div class="dc" style="border-style:dashed;opacity:.45;">
+              <div class="dc-tag">Coming soon</div>
+              <div class="dc-title">Big Data Pipeline</div>
+              <div class="dc-sub">Spark + AWS Glue architecture</div>
+              <div class="dc-tags"><span class="tag">Spark</span><span class="tag">AWS</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ MOBILE ════ -->
+  <div class="mobile-layout">
+
+    <!-- Mobile header -->
+    <div class="m-header">
+      <div class="m-profile">
+        <div class="m-avatar">M</div>
+        <div>
+          <div class="m-name">Martín Ramírez</div>
+          <div class="m-role">Data Scientist · Engineer</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="display:flex;align-items:center;gap:5px;">
+          <div class="pulse"></div>
+          <div style="font-size:9px;color:var(--text2);">AI on</div>
+        </div>
+        <div class="m-lang"><div class="mlb on">EN</div><div class="mlb">ES</div></div>
+      </div>
+    </div>
+
+    <!-- Mobile scroll content -->
+    <div class="m-scroll">
+
+      <!-- Hero -->
+      <div class="m-hero">
+        <div class="m-ey">Interactive Portfolio · AI-Powered</div>
+        <h1 class="m-h">Ask me <em>anything.</em></h1>
+        <p class="m-p">This AI knows Martín's work & projects — and fetches live data on demand.</p>
+        <div class="m-sugs">
+          <div class="m-sug"><div class="m-sug-icon">👤</div><div><div class="m-sug-l">Profile</div><div class="m-sug-t">Tell me about Martín and what makes him stand out</div></div></div>
+          <div class="m-sug"><div class="m-sug-icon">🌤</div><div><div class="m-sug-l">Live Tool</div><div class="m-sug-t">What's the weather in Mexico City right now?</div></div></div>
+          <div class="m-sug"><div class="m-sug-icon">📰</div><div><div class="m-sug-l">Live Tool</div><div class="m-sug-t">Most relevant tech & data news today</div></div></div>
+          <div class="m-sug"><div class="m-sug-icon">⚡</div><div><div class="m-sug-l">Agentic AI</div><div class="m-sug-t">Fetch a live data point from a public API</div></div></div>
+        </div>
+      </div>
+
+      <!-- Mobile: Certs & Courses -->
+      <div class="m-sec">
+        <div class="m-sh"><div class="m-st">Certifications & Courses</div><div class="m-sl">all →</div></div>
+
+        <div class="m-cc feat">
+          <div class="m-cc-in">
+            <div class="m-cc-top">
+              <div class="m-cc-logo" style="background:rgba(255,153,0,.15);color:#ff9900;">AWS</div>
+              <div>
+                <div class="m-cc-iss">Amazon Web Services</div>
+              </div>
+            </div>
+            <div class="m-cc-name">AWS Cloud Practitioner Essentials</div>
+            <div class="m-cc-meta">
+              <div class="badge b-amber">⏳ In progress</div>
+              <div class="cc-date" style="font-size:9px;">Expected soon</div>
+            </div>
+            <div class="prog" style="margin-top:8px;">
+              <div class="prog-row"><span>Progress</span><strong>85%</strong></div>
+              <div class="prog-track"><div class="prog-fill" style="width:85%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:600;margin:10px 0 6px;">Courses</div>
+
+        <div class="m-coc">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px;"></div>
+          <div>
+            <div class="co-name">Data Engineering Zoomcamp</div>
+            <div class="co-plat">DataTalks.Club</div>
+            <div class="co-tags" style="margin-top:5px;"><span class="badge b-blue">Completed</span><span class="tag">Spark</span><span class="tag">dbt</span></div>
+          </div>
+        </div>
+        <div class="m-coc">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:4px;"></div>
+          <div>
+            <div class="co-name">Rust — The Complete Guide</div>
+            <div class="co-plat">Udemy</div>
+            <div class="co-tags" style="margin-top:5px;"><span class="badge b-amber">In progress</span><span class="tag">Rust</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile: Live Demos -->
+      <div class="m-sec">
+        <div class="m-sh"><div class="m-st">Live Demos</div><div class="m-sl">all →</div></div>
+        <div class="m-dc">
+          <div class="m-dc-icon">🌸</div>
+          <div>
+            <div class="m-dc-title">Iris Classifier</div>
+            <div class="m-dc-sub">ML · Logistic Regression · real-time probabilities</div>
+          </div>
+        </div>
+        <div class="m-dc">
+          <div class="m-dc-icon">📦</div>
+          <div>
+            <div class="m-dc-title">ABC Analysis</div>
+            <div class="m-dc-sub">Analytics · Pareto inventory segmentation</div>
+          </div>
+        </div>
+        <div class="m-dc" style="opacity:.45;border-style:dashed;">
+          <div class="m-dc-icon" style="background:var(--bg3);">⚙️</div>
+          <div>
+            <div class="m-dc-title">Big Data Pipeline</div>
+            <div class="m-dc-sub">Coming soon · Spark + AWS Glue</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mobile chat input -->
+    <div class="m-input-wrap">
+      <div class="m-input-row">
+        <input class="m-input" placeholder="Ask me anything..." readonly>
+        <div class="m-send">↑</div>
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="m-nav">
+      <div class="m-ni on"><div class="m-ni-icon">◈</div><div class="m-ni-label">Chat</div></div>
+      <div class="m-ni"><div class="m-ni-icon">⬡</div><div class="m-ni-label">Demos</div></div>
+      <div class="m-ni cert-on"><div class="m-ni-icon">🏅</div><div class="m-ni-label">Certs</div></div>
+      <div class="m-ni"><div class="m-ni-icon">◎</div><div class="m-ni-label">Arch</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setView(v){
+  const b = document.getElementById('browser');
+  b.className = 'browser ' + v;
+  document.querySelectorAll('.toggle-btn').forEach((el,i)=>{
+    el.classList.toggle('active', (i===0&&v==='desktop')||(i===1&&v==='mobile'));
+  });
+}
+</script>
+</body>
+</html>
