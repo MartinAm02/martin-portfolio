@@ -1,55 +1,53 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { ChatPanel } from "@/components/ChatPanel";
 import {
   certifications,
-  courses,
-  demos,
-  mobileNavigation,
-  navigation,
-  profile,
-  projects,
-  uiText
+  localizedContent,
+  type Locale,
+  profile
 } from "@/lib/data";
 
-function BrowserBar() {
+function LanguageToggle({
+  locale,
+  mobile = false,
+  setLocale
+}: {
+  locale: Locale;
+  mobile?: boolean;
+  setLocale: (locale: Locale) => void;
+}) {
+  const className = mobile ? "mlb" : "lb";
+
   return (
-    <div className="browser-bar">
-      <div className="dots" aria-hidden="true">
-        <div className="dot" style={{ background: "#ff5f57" }} />
-        <div className="dot" style={{ background: "#febc2e" }} />
-        <div className="dot" style={{ background: "#28c840" }} />
-      </div>
-      <div className="url">
-        <span aria-hidden="true">lock</span>
-        <span>{profile.url}</span>
-      </div>
-      <div className="vercel-mark">{uiText.browserProvider}</div>
+    <div className={mobile ? "m-lang" : "lang"} aria-label={localizedContent[locale].ui.languageLabel}>
+      <button className={`${className} ${locale === "es" ? "on" : ""}`} onClick={() => setLocale("es")} type="button">
+        ES
+      </button>
+      <button className={`${className} ${locale === "en" ? "on" : ""}`} onClick={() => setLocale("en")} type="button">
+        EN
+      </button>
     </div>
   );
 }
 
-function LanguageToggle({ mobile = false }: { mobile?: boolean }) {
-  return (
-    <div className={mobile ? "m-lang" : "lang"} aria-label="Language selector">
-      <div className={mobile ? "mlb on" : "lb on"}>{uiText.language.primary}</div>
-      <div className={mobile ? "mlb" : "lb"}>{uiText.language.secondary}</div>
-    </div>
-  );
-}
+function Sidebar({ locale }: { locale: Locale }) {
+  const content = localizedContent[locale];
 
-function Sidebar() {
   return (
     <aside className="sidebar">
       <div>
         <div className="avatar">{profile.initials}</div>
         <div className="p-name">{profile.name}</div>
-        <div className="p-role">{profile.role}</div>
+        <div className="p-role">{content.profileRole}</div>
       </div>
 
       <div>
-        <div className="slabel">{uiText.openToLabel}</div>
+        <div className="slabel">{content.ui.openToLabel}</div>
         <div className="open-list">
-          {profile.openTo.map((item) => (
+          {content.openTo.map((item) => (
             <div className="open-item" key={item}>
               <span className="open-dot" />
               {item}
@@ -59,9 +57,9 @@ function Sidebar() {
       </div>
 
       <div>
-        <div className="slabel">{uiText.navigateLabel}</div>
+        <div className="slabel">{content.ui.navigateLabel}</div>
         <nav className="nav" aria-label="Portfolio sections">
-          {navigation.map((item) => (
+          {content.navigation.map((item) => (
             <a className={`nav-item ${item.tone ?? ""}`} href={item.href} key={item.label}>
               <span className="nav-dot" />
               {item.label}
@@ -71,7 +69,7 @@ function Sidebar() {
       </div>
 
       <div>
-        <div className="slabel">{uiText.stackLabel}</div>
+        <div className="slabel">{content.ui.stackLabel}</div>
         <div className="tags">
           {profile.stack.map((tag, index) => (
             <span className={index < 3 ? "tag hi" : "tag"} key={tag}>{tag}</span>
@@ -81,29 +79,28 @@ function Sidebar() {
 
       <div className="status-line">
         <div className="pulse" />
-        <div>{uiText.statusLine}</div>
+        <div>{content.ui.statusLine}</div>
       </div>
     </aside>
   );
 }
 
-function SectionHeader({ title, compact = false }: { title: string; compact?: boolean }) {
+function SectionHeader({ title }: { title: string }) {
   return (
     <div className="section-header">
       <h2 className="section-title">{title}</h2>
-      <span className="section-link">
-        {compact ? uiText.sectionLinks.compact : uiText.sectionLinks.full}
-      </span>
     </div>
   );
 }
 
-function ProjectsSection() {
+function ProjectsSection({ locale }: { locale: Locale }) {
+  const content = localizedContent[locale];
+
   return (
     <section id="projects">
-      <SectionHeader title="Projects" />
+      <SectionHeader title={content.sections.projects} />
       <div className="project-grid">
-        {projects.map((project) => (
+        {content.projects.map((project) => (
           <article className="project-card" key={project.name}>
             <h3 className="project-title">{project.name}</h3>
             <p className="project-description">{project.description}</p>
@@ -119,12 +116,13 @@ function ProjectsSection() {
   );
 }
 
-function CertificationsSection() {
+function CertificationsSection({ locale }: { locale: Locale }) {
+  const content = localizedContent[locale];
   const cert = certifications[0];
 
   return (
     <section id="certs">
-      <SectionHeader title="Certifications & Courses" />
+      <SectionHeader title={content.sections.certifications} />
       <div className="cert-grid">
         <article className="cc featured">
           <div className="cc-in">
@@ -135,14 +133,14 @@ function CertificationsSection() {
             <h3 className="cc-name">{cert.name}</h3>
             <div className="cc-meta">
               <span className="badge b-amber">
-                {cert.status === "in-progress" ? "In progress" : "Completed"}
+                {cert.status === "in-progress" ? content.certificationStatus.inProgress : content.certificationStatus.completed}
               </span>
               <span className="cc-date">{cert.date}</span>
             </div>
             {typeof cert.progress === "number" && (
               <div className="progress">
                 <div className="progress-row">
-                  <span>Progress</span>
+                  <span>{content.ui.progress}</span>
                   <strong>{cert.progress}%</strong>
                 </div>
                 <div className="progress-track">
@@ -154,12 +152,12 @@ function CertificationsSection() {
         </article>
         <article className="cc empty-card">
           <div className="empty-plus">+</div>
-          <div>Next cert<br />coming soon</div>
+          <div>{content.ui.nextCert}</div>
         </article>
       </div>
       <div className="courses">
-        <div className="course-label">Courses</div>
-        {courses.map((course) => (
+        <div className="course-label">{content.ui.coursesLabel}</div>
+        {content.courses.map((course) => (
           <article className="course-card" key={course.name}>
             <div className={`course-dot ${course.accent}`} />
             <div>
@@ -177,66 +175,15 @@ function CertificationsSection() {
   );
 }
 
-function LiveDemosSection() {
+function LiveDemosSection({ locale, mobile = false }: { locale: Locale; mobile?: boolean }) {
+  const content = localizedContent[locale];
+
   return (
     <section id="demos">
-      <SectionHeader title="Live Demos" />
+      <SectionHeader title={content.sections.demos} />
       <div className="demo-strip">
-        {demos.map((demo) => {
-          const content = (
-            <>
-              <div className="dc-tag">{demo.category}</div>
-              <h3 className="dc-title">{demo.title}</h3>
-              <div className="dc-sub">{demo.description}</div>
-              <div className="dc-tags">
-                {demo.tags.map((tag, index) => (
-                  <span className={index === 0 ? "tag hi" : "tag"} key={tag}>{tag}</span>
-                ))}
-              </div>
-            </>
-          );
-
-          return demo.disabled ? (
-            <article className="demo-card disabled" key={demo.title}>{content}</article>
-          ) : (
-            <Link className="demo-card" href={demo.href} key={demo.title}>{content}</Link>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function MobileHeader() {
-  return (
-    <div className="m-header">
-      <div className="m-profile">
-        <div className="m-avatar">{profile.initials}</div>
-        <div>
-          <div className="m-name">{profile.name}</div>
-          <div className="m-role">{profile.role}</div>
-        </div>
-      </div>
-      <div className="m-actions">
-        <div className="ai-on"><div className="pulse" />{uiText.aiStatus}</div>
-        <LanguageToggle mobile />
-      </div>
-    </div>
-  );
-}
-
-function MobileDemosSection() {
-  return (
-    <section className="mobile-spacer">
-      <SectionHeader title="Live Demos" compact />
-      <div className="demo-strip">
-        {demos.map((demo, index) => (
-          <Link
-            aria-disabled={demo.disabled}
-            className={demo.disabled ? "demo-card disabled" : "demo-card"}
-            href={demo.href}
-            key={demo.title}
-          >
+        {content.demos.map((demo, index) => {
+          const cardContent = mobile ? (
             <div className="mobile-sug">
               <div className="m-demo-icon">{index + 1}</div>
               <div>
@@ -244,19 +191,57 @@ function MobileDemosSection() {
                 <div className="dc-sub">{demo.category} · {demo.description}</div>
               </div>
             </div>
-          </Link>
-        ))}
+          ) : (
+            <>
+              <div className="dc-tag">{demo.category}</div>
+              <h3 className="dc-title">{demo.title}</h3>
+              <div className="dc-sub">{demo.description}</div>
+              <div className="dc-tags">
+                {demo.tags.map((tag, tagIndex) => (
+                  <span className={tagIndex === 0 ? "tag hi" : "tag"} key={tag}>{tag}</span>
+                ))}
+              </div>
+            </>
+          );
+
+          return demo.disabled ? (
+            <article className="demo-card disabled" key={demo.title}>{cardContent}</article>
+          ) : (
+            <Link className="demo-card" href={demo.href} key={demo.title}>{cardContent}</Link>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-function BottomNav() {
+function MobileHeader({ locale, setLocale }: { locale: Locale; setLocale: (locale: Locale) => void }) {
+  const content = localizedContent[locale];
+
+  return (
+    <div className="m-header">
+      <div className="m-profile">
+        <div className="m-avatar">{profile.initials}</div>
+        <div>
+          <div className="m-name">{profile.name}</div>
+          <div className="m-role">{content.profileRole}</div>
+        </div>
+      </div>
+      <div className="m-actions">
+        <div className="ai-on"><div className="pulse" />{content.ui.aiStatus}</div>
+        <LanguageToggle locale={locale} mobile setLocale={setLocale} />
+      </div>
+    </div>
+  );
+}
+
+function BottomNav({ locale }: { locale: Locale }) {
   const icons = ["◆", "▦", "↓", "◎"];
+  const content = localizedContent[locale];
 
   return (
     <nav className="m-nav" aria-label="Mobile sections">
-      {mobileNavigation.map((item, index) => (
+      {content.mobileNavigation.map((item, index) => (
         <a className={`m-nav-item ${item.tone ?? ""}`} href={item.href} key={item.label}>
           <span className="m-nav-icon">{icons[index]}</span>
           {item.label}
@@ -267,40 +252,50 @@ function BottomNav() {
 }
 
 export default function Home() {
+  const [locale, setLocale] = useState<Locale>("es");
+  const content = localizedContent[locale];
+
   return (
     <main className="page-shell">
-      <div className="browser">
-        <BrowserBar />
-
-        <div className="desktop-layout">
-          <Sidebar />
-          <div className="main-d">
-            <div className="topbar">
-              <div>
-                <div className="tbar-title">{uiText.portfolioTitle}</div>
-                <div className="tbar-sub">{profile.headline}</div>
-              </div>
-              <LanguageToggle />
+      <div className="desktop-layout">
+        <Sidebar locale={locale} />
+        <div className="main-d">
+          <div className="topbar">
+            <div>
+              <div className="tbar-title">{content.ui.portfolioTitle}</div>
+              <div className="tbar-sub">{content.profileHeadline}</div>
             </div>
-            <div className="scroll">
-              <ChatPanel />
-              <ProjectsSection />
-              <CertificationsSection />
-              <LiveDemosSection />
-            </div>
+            <LanguageToggle locale={locale} setLocale={setLocale} />
+          </div>
+          <div className="scroll">
+            <ChatPanel
+              chatContent={content.chat}
+              heroContent={content.hero}
+              key={`desktop-${locale}`}
+              suggestions={content.suggestions}
+            />
+            <ProjectsSection locale={locale} />
+            <CertificationsSection locale={locale} />
+            <LiveDemosSection locale={locale} />
           </div>
         </div>
+      </div>
 
-        <div className="mobile-layout">
-          <MobileHeader />
-          <div className="m-scroll">
-            <ChatPanel mobile />
-            <ProjectsSection />
-            <CertificationsSection />
-            <MobileDemosSection />
-          </div>
-          <BottomNav />
+      <div className="mobile-layout">
+        <MobileHeader locale={locale} setLocale={setLocale} />
+        <div className="m-scroll">
+          <ChatPanel
+            chatContent={content.chat}
+            heroContent={content.hero}
+            key={`mobile-${locale}`}
+            mobile
+            suggestions={content.suggestions}
+          />
+          <ProjectsSection locale={locale} />
+          <CertificationsSection locale={locale} />
+          <LiveDemosSection locale={locale} mobile />
         </div>
+        <BottomNav locale={locale} />
       </div>
     </main>
   );

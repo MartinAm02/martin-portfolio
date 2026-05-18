@@ -99,6 +99,48 @@ export type ChatContent = {
   initialAssistantMessage: string;
   missingKeyMessage: string;
   genericErrorMessage: string;
+  thinkingMessage?: string;
+};
+
+export type Locale = "es" | "en";
+
+export type LocalizedProject = Project;
+
+export type LocalizedDemo = Demo;
+
+export type LocalizedContent = {
+  profileRole: string;
+  profileHeadline: string;
+  openTo: string[];
+  ui: {
+    portfolioTitle: string;
+    openToLabel: string;
+    navigateLabel: string;
+    stackLabel: string;
+    statusLine: string;
+    aiStatus: string;
+    languageLabel: string;
+    coursesLabel: string;
+    nextCert: string;
+    progress: string;
+  };
+  navigation: NavItem[];
+  mobileNavigation: NavItem[];
+  sections: {
+    projects: string;
+    certifications: string;
+    demos: string;
+  };
+  hero: HeroContent;
+  suggestions: Suggestion[];
+  projects: LocalizedProject[];
+  demos: LocalizedDemo[];
+  certificationStatus: {
+    inProgress: string;
+    completed: string;
+  };
+  courses: Course[];
+  chat: ChatContent;
 };
 
 export const profile: Profile = {
@@ -127,10 +169,6 @@ export const uiText = {
     primary: "EN",
     secondary: "ES"
   },
-  sectionLinks: {
-    full: "view all ->",
-    compact: "all ->"
-  },
   backToPortfolio: "← Back to portfolio"
 };
 
@@ -139,7 +177,8 @@ export const chatContent: ChatContent = {
   sendLabel: "Send message",
   initialAssistantMessage: "Hi, I can answer questions about Martin's profile, projects, stack and demos. Live external tools will be wired in later.",
   missingKeyMessage: "GROQ_API_KEY is not configured yet. Add it to .env.local and restart the dev server.",
-  genericErrorMessage: "The chat could not respond right now. Please try again in a moment."
+  genericErrorMessage: "The chat could not respond right now. Please try again in a moment.",
+  thinkingMessage: "Thinking..."
 };
 
 export const navigation: NavItem[] = [
@@ -325,6 +364,120 @@ export const abcDemoContent: AbcDemoContent = {
     { name: "Data Migration", revenue: 18000 },
     { name: "Training Pack", revenue: 9000 }
   ]
+};
+
+export const localizedContent: Record<Locale, LocalizedContent> = {
+  es: {
+    profileRole: "Data Scientist · Data Engineer",
+    profileHeadline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
+    openTo: ["Roles de Data Engineering", "Consultoría ML", "Proyectos de datos en salud"],
+    ui: {
+      portfolioTitle: "Portafolio",
+      openToLabel: "Abierto a",
+      navigateLabel: "Navegar",
+      stackLabel: "Stack",
+      statusLine: "AI tools activos · ES / EN",
+      aiStatus: "AI activo",
+      languageLabel: "Idioma",
+      coursesLabel: "Cursos",
+      nextCert: "Siguiente certificación próximamente",
+      progress: "Progreso"
+    },
+    navigation: [
+      { label: "Chat AI", href: "#chat", tone: "active" },
+      { label: "Proyectos", href: "#projects" },
+      { label: "Demos", href: "#demos" },
+      { label: "Certs y cursos", href: "#certs", tone: "cert" }
+    ],
+    mobileNavigation: [
+      { label: "Chat", href: "#chat", tone: "active" },
+      { label: "Proyectos", href: "#projects" },
+      { label: "Demos", href: "#demos" },
+      { label: "Certs", href: "#certs", tone: "cert" }
+    ],
+    sections: {
+      projects: "Proyectos",
+      certifications: "Certificaciones y cursos",
+      demos: "Demos"
+    },
+    hero: {
+      eyebrow: "Portafolio interactivo · AI-powered",
+      titlePrefix: "Pregúntame ",
+      titleAccent: "lo que quieras.",
+      titleSuffix: "Uso herramientas reales.",
+      description: "Este portafolio presenta proyectos de data engineering, analítica e IA de Martin. El chat con Groq + LLaMA 3 ya está conectado."
+    },
+    suggestions: [
+      { label: "Perfil", text: "Háblame de Martin y qué lo hace destacar" },
+      { label: "Experiencia", text: "¿En qué empresas ha trabajado Martin?" },
+      { label: "Proyectos", text: "Resume los proyectos principales de Martin" },
+      { label: "Stack", text: "¿Qué stack técnico maneja Martin?" }
+    ],
+    projects: [
+      { name: "Valora Ops AI", stack: ["FastAPI", "Supabase", "Next.js", "Groq", "LLaMA 3", "Railway"], description: "Plataforma de operaciones con IA para flujos de consultoría y asistentes basados en datos." },
+      { name: "Portfolio AI", stack: ["Next.js 15", "TypeScript", "Groq", "LLaMA 3", "Vercel"], description: "Portafolio profesional interactivo con demos en vivo y capa de chat con IA." },
+      { name: "Sales Commission Pipeline", stack: ["PySpark", "Delta Lake", "Trino", "GitHub Actions"], description: "Pipeline estilo medallion para reportes de comisiones y calidad de datos." },
+      { name: "Demand Forecast", stack: ["Python", "XGBoost", "statsmodels", "pandas"], description: "Flujo de forecasting para demanda, estacionalidad y comparación de modelos." },
+      { name: "MAPFRE NPS Analytics", stack: ["R", "Shiny", "Plotly", "Power BI"], description: "Dashboards y análisis NPS para experiencia de cliente." },
+      { name: "Natura Stock Health", stack: ["Python", "pandas", "Excel Automation", "Data Engineering"], description: "Análisis de salud de stock y reporteo automatizado para decisiones operativas." }
+    ],
+    demos: [
+      { title: "Iris Classifier", category: "ML · Clasificación", description: "Regresión logística y probabilidades en tiempo real", href: "/demos/iris", tags: ["Python", "sklearn"] },
+      { title: "ABC Analysis", category: "Analítica · Ops", description: "Segmentación Pareto para inventario", href: "/demos/abc", tags: ["Python", "pandas"] },
+      { title: "Big Data Pipeline", category: "Próximamente", description: "Arquitectura Spark + Delta Lake", href: "/demos/pipeline", tags: ["Spark", "Delta"], disabled: true }
+    ],
+    certificationStatus: {
+      inProgress: "En progreso",
+      completed: "Completado"
+    },
+    courses: [
+      { name: "Data Engineering Zoomcamp", platform: "DataTalks.Club", status: "Completed", accent: "blue", tags: ["Spark", "Kafka", "dbt"] },
+      { name: "Machine Learning Specialization", platform: "Coursera · Andrew Ng", status: "Completed", accent: "purple", tags: ["ML", "Neural Nets"] },
+      { name: "Rust - The Complete Guide", platform: "Udemy", status: "In progress", accent: "amber", tags: ["Rust", "Tauri"] }
+    ],
+    chat: {
+      inputPlaceholder: "Pregúntame algo...",
+      sendLabel: "Enviar",
+      initialAssistantMessage: "Hola, puedo responder preguntas sobre el perfil, experiencia, proyectos, stack y demos de Martin.",
+      missingKeyMessage: "GROQ_API_KEY no está configurada. Agrégala a .env.local y reinicia el servidor.",
+      genericErrorMessage: "El chat no pudo responder ahora. Inténtalo de nuevo en un momento.",
+      thinkingMessage: "Pensando..."
+    }
+  },
+  en: {
+    profileRole: "Data Scientist · Data Engineer",
+    profileHeadline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
+    openTo: ["Data Engineering roles", "ML consulting", "Health data projects"],
+    ui: {
+      portfolioTitle: "Portfolio",
+      openToLabel: "Open to",
+      navigateLabel: "Navigate",
+      stackLabel: "Stack",
+      statusLine: "AI tools active · EN / ES",
+      aiStatus: "AI active",
+      languageLabel: "Language",
+      coursesLabel: "Courses",
+      nextCert: "Next certification coming soon",
+      progress: "Progress"
+    },
+    navigation,
+    mobileNavigation,
+    sections: {
+      projects: "Projects",
+      certifications: "Certifications & Courses",
+      demos: "Live Demos"
+    },
+    hero: heroContent,
+    suggestions,
+    projects,
+    demos,
+    certificationStatus: {
+      inProgress: "In progress",
+      completed: "Completed"
+    },
+    courses,
+    chat: chatContent
+  }
 };
 
 export const SYSTEM_PROMPT = `

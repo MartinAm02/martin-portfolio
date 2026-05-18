@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useRef, useState } from "react";
-import { chatContent, heroContent, suggestions } from "@/lib/data";
+import type { ChatContent, HeroContent, Suggestion } from "@/lib/data";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -9,10 +9,13 @@ type ChatMessage = {
 };
 
 type ChatPanelProps = {
+  chatContent: ChatContent;
+  heroContent: HeroContent;
   mobile?: boolean;
+  suggestions: Suggestion[];
 };
 
-export function ChatPanel({ mobile = false }: ChatPanelProps) {
+export function ChatPanel({ chatContent, heroContent, mobile = false, suggestions }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: chatContent.initialAssistantMessage }
   ]);
@@ -107,7 +110,7 @@ export function ChatPanel({ mobile = false }: ChatPanelProps) {
               {message.content}
             </div>
           ))}
-          {isLoading && <div className="chat-message assistant">Thinking...</div>}
+          {isLoading && <div className="chat-message assistant">{chatContent.thinkingMessage ?? "Thinking..."}</div>}
         </div>
 
         <form className="chat-form" onSubmit={handleSubmit}>
