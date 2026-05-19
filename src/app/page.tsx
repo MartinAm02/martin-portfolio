@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { ChatPanel } from "@/components/ChatPanel";
 import {
@@ -9,6 +10,26 @@ import {
   type Locale,
   profile
 } from "@/lib/data";
+
+function ProfileAvatar({ className }: { className: "avatar" | "m-avatar" }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div className={className}>
+      {!failed && (
+        <Image
+          alt=""
+          className="avatar-image"
+          fill
+          sizes={className === "avatar" ? "52px" : "34px"}
+          onError={() => setFailed(true)}
+          src={profile.photoUrl}
+        />
+      )}
+      <span className="avatar-fallback">{profile.initials}</span>
+    </div>
+  );
+}
 
 function LanguageToggle({
   locale,
@@ -39,7 +60,7 @@ function Sidebar({ locale }: { locale: Locale }) {
   return (
     <aside className="sidebar">
       <div>
-        <div className="avatar">{profile.initials}</div>
+        <ProfileAvatar className="avatar" />
         <div className="p-name">{content.profileName}</div>
         <div className="p-role">{content.profileRole}</div>
       </div>
@@ -232,6 +253,15 @@ function LiveDemosSection({ locale, mobile = false }: { locale: Locale; mobile?:
 
           return demo.disabled ? (
             <article className="demo-card disabled" key={demo.title}>{cardContent}</article>
+          ) : demo.repoUrl ? (
+            <article className="demo-card" key={demo.title}>
+              <Link href={demo.href}>{cardContent}</Link>
+              <div className="demo-card-actions">
+                <a className="demo-card-repo" href={demo.repoUrl} rel="noreferrer" target="_blank">
+                  GitHub repo
+                </a>
+              </div>
+            </article>
           ) : (
             <Link className="demo-card" href={demo.href} key={demo.title}>{cardContent}</Link>
           );
@@ -247,7 +277,7 @@ function MobileHeader({ locale, setLocale }: { locale: Locale; setLocale: (local
   return (
     <div className="m-header">
       <div className="m-profile">
-        <div className="m-avatar">{profile.initials}</div>
+        <ProfileAvatar className="m-avatar" />
         <div>
           <div className="m-name">{content.profileName}</div>
           <div className="m-role">{content.profileRole}</div>

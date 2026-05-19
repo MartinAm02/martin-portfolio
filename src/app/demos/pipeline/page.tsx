@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import type { Locale } from "@/lib/data";
+import { FloatingDemoChat } from "@/components/ChatPanel";
+import { chatContent, demoChatContexts, type Locale } from "@/lib/data";
 
 type CommissionRow = {
   rep_id: string;
@@ -400,6 +401,13 @@ export default function PipelineDemoPage() {
           </section>
         </>
       )}
+      <FloatingDemoChat
+        chatContent={chatContent}
+        contextPrompt={demoChatContexts.pipeline.context}
+        initialMessage={demoChatContexts.pipeline.initialMessage}
+        suggestions={demoChatContexts.pipeline.suggestions}
+        title={demoChatContexts.pipeline.title}
+      />
     </main>
   );
 }

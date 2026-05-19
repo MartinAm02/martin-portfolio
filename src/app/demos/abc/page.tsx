@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { abcDemoContent, type AbcProduct, uiText } from "@/lib/data";
+import { FloatingDemoChat } from "@/components/ChatPanel";
+import { abcDemoContent, type AbcProduct, chatContent, demoChatContexts, uiText } from "@/lib/data";
 
 function getClass(cumulativeShare: number) {
   if (cumulativeShare <= 0.8) return "A";
@@ -90,6 +91,13 @@ export default function AbcDemoPage() {
           </tbody>
         </table>
       </section>
+      <FloatingDemoChat
+        chatContent={chatContent}
+        contextPrompt={demoChatContexts.abc.context}
+        initialMessage={demoChatContexts.abc.initialMessage}
+        suggestions={demoChatContexts.abc.suggestions}
+        title={demoChatContexts.abc.title}
+      />
     </main>
   );
 }

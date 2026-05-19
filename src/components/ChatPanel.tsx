@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, type RefObject, useMemo, useRef, useState } from "react";
 import type { ChatContent, HeroContent, Suggestion } from "@/lib/data";
 
 type ChatMessage = {
@@ -8,16 +8,26 @@ type ChatMessage = {
   content: string;
 };
 
-type ChatPanelProps = {
+type ChatWindowProps = {
   chatContent: ChatContent;
+  contextPrompt?: string;
+  initialMessage?: string;
+  suggestions?: Suggestion[];
+};
+
+type ChatPanelProps = ChatWindowProps & {
   heroContent: HeroContent;
   mobile?: boolean;
   suggestions: Suggestion[];
 };
 
-export function ChatPanel({ chatContent, heroContent, mobile = false, suggestions }: ChatPanelProps) {
+type FloatingDemoChatProps = ChatWindowProps & {
+  title: string;
+};
+
+function useChat({ chatContent, contextPrompt, initialMessage }: Omit<ChatWindowProps, "suggestions">) {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: chatContent.initialAssistantMessage }
+    { role: "assistant", content: initialMessage ?? chatContent.initialAssistantMessage }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +46,10 @@ export function ChatPanel({ chatContent, heroContent, mobile = false, suggestion
     }
 
     const nextMessages: ChatMessage[] = [...apiMessages, { role: "user", content: trimmed }];
+    const messagesForApi: ChatMessage[] = contextPrompt
+      ? [{ role: "assistant", content: contextPrompt }, ...nextMessages]
+      : nextMessages;
+
     setMessages(nextMessages);
     setInput("");
     setIsLoading(true);
@@ -46,7 +60,7 @@ export function ChatPanel({ chatContent, heroContent, mobile = false, suggestion
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ messages: nextMessages })
+        body: JSON.stringify({ messages: messagesForApi })
       });
 
       const payload = await response.json() as { text?: string; error?: string };
@@ -76,8 +90,82 @@ export function ChatPanel({ chatContent, heroContent, mobile = false, suggestion
     void sendMessage(input);
   }
 
+  return {
+    handleSubmit,
+    input,
+    inputRef,
+    isLoading,
+    messages,
+    sendMessage,
+    setInput
+  };
+}
+
+function ChatWindow({
+  chatContent,
+  input,
+  inputRef,
+  isLoading,
+  messages,
+  onSubmit,
+  sendMessage,
+  setInput,
+  suggestions = []
+}: {
+  chatContent: ChatContent;
+  input: string;
+  inputRef: RefObject<HTMLInputElement | null>;
+  isLoading: boolean;
+  messages: ChatMessage[];
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  sendMessage: (content: string) => Promise<void>;
+  setInput: (value: string) => void;
+  suggestions?: Suggestion[];
+}) {
+
   return (
-    <section className={mobile ? "hero mobile-spacer" : "hero"} id="chat">
+    <div className="chat-panel" aria-live="polite">
+      {suggestions.length > 0 && (
+        <div className="chat-quick-actions">
+          {suggestions.map((suggestion) => (
+            <button disabled={isLoading} key={suggestion.text} onClick={() => void sendMessage(suggestion.text)} type="button">
+              {suggestion.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="chat-messages">
+        {messages.map((message, index) => (
+          <div className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
+            {message.content}
+          </div>
+        ))}
+        {isLoading && <div className="chat-message assistant">{chatContent.thinkingMessage ?? "Thinking..."}</div>}
+      </div>
+
+        <form className="chat-form" onSubmit={onSubmit}>
+        <input
+          className="chat-input"
+          disabled={isLoading}
+          onChange={(event) => setInput(event.target.value)}
+          placeholder={chatContent.inputPlaceholder}
+          ref={inputRef}
+          value={input}
+        />
+        <button className="chat-send" disabled={isLoading || input.trim().length === 0} type="submit">
+          {chatContent.sendLabel}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export function ChatPanel({ chatContent, contextPrompt, heroContent, initialMessage, mobile = false, suggestions }: ChatPanelProps) {
+  const chat = useChat({ chatContent, contextPrompt, initialMessage });
+
+  return (
+    <section className={mobile ? "hero mobile-spacer" : "hero hero-chat-product"} id="chat">
       <div className="hero-ey">{heroContent.eyebrow}</div>
       <h1 className="hero-h">
         {heroContent.titlePrefix}<em>{heroContent.titleAccent}</em>
@@ -89,10 +177,10 @@ export function ChatPanel({ chatContent, heroContent, mobile = false, suggestion
         {suggestions.map((suggestion, index) => (
           <button
             className={mobile ? "sug mobile-sug" : "sug"}
-            disabled={isLoading}
             key={suggestion.text}
-            onClick={() => void sendMessage(suggestion.text)}
             type="button"
+            disabled={chat.isLoading}
+            onClick={() => void chat.sendMessage(suggestion.text)}
           >
             {mobile && <div className="mobile-icon">{index + 1}</div>}
             <div>
@@ -103,30 +191,46 @@ export function ChatPanel({ chatContent, heroContent, mobile = false, suggestion
         ))}
       </div>
 
-      <div className="chat-panel" aria-live="polite">
-        <div className="chat-messages">
-          {messages.map((message, index) => (
-            <div className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
-              {message.content}
-            </div>
-          ))}
-          {isLoading && <div className="chat-message assistant">{chatContent.thinkingMessage ?? "Thinking..."}</div>}
-        </div>
-
-        <form className="chat-form" onSubmit={handleSubmit}>
-          <input
-            className="chat-input"
-            disabled={isLoading}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder={chatContent.inputPlaceholder}
-            ref={inputRef}
-            value={input}
-          />
-          <button className="chat-send" disabled={isLoading || input.trim().length === 0} type="submit">
-            {chatContent.sendLabel}
-          </button>
-        </form>
-      </div>
+      <ChatWindow
+        chatContent={chatContent}
+        input={chat.input}
+        inputRef={chat.inputRef}
+        isLoading={chat.isLoading}
+        messages={chat.messages}
+        onSubmit={chat.handleSubmit}
+        sendMessage={chat.sendMessage}
+        setInput={chat.setInput}
+      />
     </section>
+  );
+}
+
+export function FloatingDemoChat({ chatContent, contextPrompt, initialMessage, suggestions, title }: FloatingDemoChatProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const chat = useChat({ chatContent, contextPrompt, initialMessage });
+
+  return (
+    <div className={`floating-chat ${isOpen ? "open" : ""}`}>
+      <button className="floating-chat-toggle" onClick={() => setIsOpen((current) => !current)} type="button">
+        {isOpen ? "×" : "AI"}
+      </button>
+      <div className="floating-chat-panel">
+        <div className="floating-chat-head">
+          <span>{title}</span>
+          <button onClick={() => setIsOpen(false)} type="button">×</button>
+        </div>
+        <ChatWindow
+          chatContent={chatContent}
+          input={chat.input}
+          inputRef={chat.inputRef}
+          isLoading={chat.isLoading}
+          messages={chat.messages}
+          onSubmit={chat.handleSubmit}
+          sendMessage={chat.sendMessage}
+          setInput={chat.setInput}
+          suggestions={suggestions}
+        />
+      </div>
+    </div>
   );
 }

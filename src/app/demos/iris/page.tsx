@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { irisDemoContent, uiText } from "@/lib/data";
+import { FloatingDemoChat } from "@/components/ChatPanel";
+import { chatContent, demoChatContexts, irisDemoContent, uiText } from "@/lib/data";
 
 type IrisClass = "setosa" | "versicolor" | "virginica";
 
@@ -91,6 +92,13 @@ export default function IrisDemoPage() {
           </div>
         </div>
       </section>
+      <FloatingDemoChat
+        chatContent={chatContent}
+        contextPrompt={demoChatContexts.iris.context}
+        initialMessage={demoChatContexts.iris.initialMessage}
+        suggestions={demoChatContexts.iris.suggestions}
+        title={demoChatContexts.iris.title}
+      />
     </main>
   );
 }
