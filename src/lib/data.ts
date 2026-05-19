@@ -44,6 +44,8 @@ export type ProfessionalExperience = {
   highlights: string[];
 };
 
+export type LocalizedExperience = ProfessionalExperience;
+
 export type Certification = {
   issuer: string;
   name: string;
@@ -55,7 +57,7 @@ export type Certification = {
 export type Course = {
   name: string;
   platform: string;
-  status: "In progress" | "Completed";
+  status: string;
   accent: "amber" | "blue" | "purple";
   tags: string[];
 };
@@ -109,6 +111,7 @@ export type LocalizedProject = Project;
 export type LocalizedDemo = Demo;
 
 export type LocalizedContent = {
+  profileName: string;
   profileRole: string;
   profileHeadline: string;
   openTo: string[];
@@ -127,18 +130,21 @@ export type LocalizedContent = {
   navigation: NavItem[];
   mobileNavigation: NavItem[];
   sections: {
+    experience: string;
     projects: string;
     certifications: string;
     demos: string;
   };
   hero: HeroContent;
   suggestions: Suggestion[];
+  experience: LocalizedExperience[];
   projects: LocalizedProject[];
   demos: LocalizedDemo[];
   certificationStatus: {
     inProgress: string;
     completed: string;
   };
+  certificationDate: string;
   courses: Course[];
   chat: ChatContent;
 };
@@ -226,7 +232,7 @@ export const projects: Project[] = [
   {
     name: "Valora Ops AI",
     stack: ["FastAPI", "Supabase", "Next.js", "Groq", "LLaMA 3", "Railway"],
-    description: "AI operations platform for consulting workflows and data-driven assistants."
+    description: "AI operations platform for prioritization, alerts and actionable decisions in consulting workflows."
   },
   {
     name: "Portfolio AI",
@@ -246,12 +252,12 @@ export const projects: Project[] = [
   {
     name: "MAPFRE NPS Analytics",
     stack: ["R", "Shiny", "Plotly", "Power BI"],
-    description: "NPS analytics dashboards and exploratory views for customer experience."
+    description: "Customer experience analytics focused on NPS, sample discard analysis and flow visualizations."
   },
   {
     name: "Natura Stock Health",
     stack: ["Python", "pandas", "Excel Automation", "Data Engineering"],
-    description: "Inventory health analysis and automated reporting for operational decisions."
+    description: "Stock health automation that reduces reporting time through multi-source consolidation."
   }
 ];
 
@@ -368,16 +374,17 @@ export const abcDemoContent: AbcDemoContent = {
 
 export const localizedContent: Record<Locale, LocalizedContent> = {
   es: {
+    profileName: "Martín Alvarez Martinez",
     profileRole: "Data Scientist · Data Engineer",
-    profileHeadline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
-    openTo: ["Roles de Data Engineering", "Consultoría ML", "Proyectos de datos en salud"],
+    profileHeadline: "Data Scientist · Data Engineer · IA aplicada",
+    openTo: ["Roles de Data Engineering", "Consultoría ML", "Analítica aplicada a negocio"],
     ui: {
       portfolioTitle: "Portafolio",
       openToLabel: "Abierto a",
       navigateLabel: "Navegar",
       stackLabel: "Stack",
-      statusLine: "AI tools activos · ES / EN",
-      aiStatus: "AI activo",
+      statusLine: "Herramientas de IA activas · ES / EN",
+      aiStatus: "IA activa",
       languageLabel: "Idioma",
       coursesLabel: "Cursos",
       nextCert: "Siguiente certificación próximamente",
@@ -385,41 +392,66 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     },
     navigation: [
       { label: "Chat AI", href: "#chat", tone: "active" },
+      { label: "Experiencia", href: "#experience" },
       { label: "Proyectos", href: "#projects" },
-      { label: "Demos", href: "#demos" },
       { label: "Certs y cursos", href: "#certs", tone: "cert" }
     ],
     mobileNavigation: [
       { label: "Chat", href: "#chat", tone: "active" },
-      { label: "Proyectos", href: "#projects" },
+      { label: "Exp", href: "#experience" },
       { label: "Demos", href: "#demos" },
       { label: "Certs", href: "#certs", tone: "cert" }
     ],
     sections: {
+      experience: "Experiencia profesional",
       projects: "Proyectos",
       certifications: "Certificaciones y cursos",
       demos: "Demos"
     },
     hero: {
-      eyebrow: "Portafolio interactivo · AI-powered",
-      titlePrefix: "Pregúntame ",
-      titleAccent: "lo que quieras.",
-      titleSuffix: "Uso herramientas reales.",
-      description: "Este portafolio presenta proyectos de data engineering, analítica e IA de Martin. El chat con Groq + LLaMA 3 ya está conectado."
+      eyebrow: "Portafolio interactivo · Data Engineering · IA aplicada",
+      titlePrefix: "Pregúntame por mi ",
+      titleAccent: "experiencia,",
+      titleSuffix: "proyectos y stack técnico.",
+      description: "Construyo soluciones de datos para automatizar reportes, explicar procesos y convertir información operativa en decisiones accionables."
     },
     suggestions: [
-      { label: "Perfil", text: "Háblame de Martin y qué lo hace destacar" },
-      { label: "Experiencia", text: "¿En qué empresas ha trabajado Martin?" },
-      { label: "Proyectos", text: "Resume los proyectos principales de Martin" },
-      { label: "Stack", text: "¿Qué stack técnico maneja Martin?" }
+      { label: "Perfil", text: "Háblame de Martín y qué lo hace destacar" },
+      { label: "Experiencia", text: "¿En qué empresas ha trabajado Martín?" },
+      { label: "Proyectos", text: "Resume los proyectos principales de Martín" },
+      { label: "Stack", text: "¿Qué stack técnico maneja Martín?" }
+    ],
+    experience: [
+      {
+        company: "MAPFRE México",
+        role: "Data Science Intern / Data Analyst Intern",
+        area: "Clientes, NPS y analítica de clientes",
+        highlights: [
+          "Automatización de reportes NPS",
+          "Dashboards interactivos",
+          "Análisis de descarte y sesgo de muestra",
+          "Visualizaciones Sankey para procesos de contratación, renovación, asistencia y siniestros"
+        ]
+      },
+      {
+        company: "Natura",
+        role: "Data Science Intern / Inventory Analytics",
+        area: "Inventory Control / Salud de stock",
+        highlights: [
+          "Automatización de reportes de salud de stock",
+          "Consolidación E1, JDA y SAP",
+          "Transformación con Python, pandas y Excel",
+          "Análisis de demanda, inventario, exceso y provisiones"
+        ]
+      }
     ],
     projects: [
-      { name: "Valora Ops AI", stack: ["FastAPI", "Supabase", "Next.js", "Groq", "LLaMA 3", "Railway"], description: "Plataforma de operaciones con IA para flujos de consultoría y asistentes basados en datos." },
+      { name: "Valora Ops AI", stack: ["FastAPI", "Supabase", "Next.js", "Groq", "LLaMA 3", "Railway"], description: "Plataforma de operaciones con IA para priorización operativa, alertas y decisiones accionables." },
       { name: "Portfolio AI", stack: ["Next.js 15", "TypeScript", "Groq", "LLaMA 3", "Vercel"], description: "Portafolio profesional interactivo con demos en vivo y capa de chat con IA." },
       { name: "Sales Commission Pipeline", stack: ["PySpark", "Delta Lake", "Trino", "GitHub Actions"], description: "Pipeline estilo medallion para reportes de comisiones y calidad de datos." },
       { name: "Demand Forecast", stack: ["Python", "XGBoost", "statsmodels", "pandas"], description: "Flujo de forecasting para demanda, estacionalidad y comparación de modelos." },
-      { name: "MAPFRE NPS Analytics", stack: ["R", "Shiny", "Plotly", "Power BI"], description: "Dashboards y análisis NPS para experiencia de cliente." },
-      { name: "Natura Stock Health", stack: ["Python", "pandas", "Excel Automation", "Data Engineering"], description: "Análisis de salud de stock y reporteo automatizado para decisiones operativas." }
+      { name: "MAPFRE NPS Analytics", stack: ["R", "Shiny", "Plotly", "Power BI"], description: "Analítica de experiencia de cliente con NPS, descarte de muestras y visualizaciones de flujo." },
+      { name: "Natura Stock Health", stack: ["Python", "pandas", "Excel Automation", "Data Engineering"], description: "Automatización de salud de stock con reducción de tiempos y consolidación multi-fuente." }
     ],
     demos: [
       { title: "Iris Classifier", category: "ML · Clasificación", description: "Regresión logística y probabilidades en tiempo real", href: "/demos/iris", tags: ["Python", "sklearn"] },
@@ -430,24 +462,26 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       inProgress: "En progreso",
       completed: "Completado"
     },
+    certificationDate: "Próximamente",
     courses: [
-      { name: "Data Engineering Zoomcamp", platform: "DataTalks.Club", status: "Completed", accent: "blue", tags: ["Spark", "Kafka", "dbt"] },
-      { name: "Machine Learning Specialization", platform: "Coursera · Andrew Ng", status: "Completed", accent: "purple", tags: ["ML", "Neural Nets"] },
-      { name: "Rust - The Complete Guide", platform: "Udemy", status: "In progress", accent: "amber", tags: ["Rust", "Tauri"] }
+      { name: "Data Engineering Zoomcamp", platform: "DataTalks.Club", status: "Completado", accent: "blue", tags: ["Spark", "Kafka", "dbt"] },
+      { name: "Machine Learning Specialization", platform: "Coursera · Andrew Ng", status: "Completado", accent: "purple", tags: ["ML", "Redes neuronales"] },
+      { name: "Rust - The Complete Guide", platform: "Udemy", status: "En progreso", accent: "amber", tags: ["Rust", "Tauri"] }
     ],
     chat: {
       inputPlaceholder: "Pregúntame algo...",
       sendLabel: "Enviar",
-      initialAssistantMessage: "Hola, puedo responder preguntas sobre el perfil, experiencia, proyectos, stack y demos de Martin.",
+      initialAssistantMessage: "Hola, puedo responder preguntas sobre el perfil, experiencia, proyectos, stack y demos de Martín.",
       missingKeyMessage: "GROQ_API_KEY no está configurada. Agrégala a .env.local y reinicia el servidor.",
       genericErrorMessage: "El chat no pudo responder ahora. Inténtalo de nuevo en un momento.",
       thinkingMessage: "Pensando..."
     }
   },
   en: {
+    profileName: "Martin Alvarez Martinez",
     profileRole: "Data Scientist · Data Engineer",
     profileHeadline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
-    openTo: ["Data Engineering roles", "ML consulting", "Health data projects"],
+    openTo: ["Data Engineering roles", "ML consulting", "Business analytics projects"],
     ui: {
       portfolioTitle: "Portfolio",
       openToLabel: "Open to",
@@ -463,18 +497,50 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     navigation,
     mobileNavigation,
     sections: {
+      experience: "Professional Experience",
       projects: "Projects",
       certifications: "Certifications & Courses",
       demos: "Live Demos"
     },
-    hero: heroContent,
+    hero: {
+      eyebrow: "Interactive Portfolio · Data Engineering · Applied AI",
+      titlePrefix: "Ask about my ",
+      titleAccent: "experience,",
+      titleSuffix: "projects and technical stack.",
+      description: "I build data solutions that automate reporting, explain business processes and turn operational data into actionable decisions."
+    },
     suggestions,
+    experience: [
+      {
+        company: "MAPFRE México",
+        role: "Data Science Intern / Data Analyst Intern",
+        area: "Clients, NPS and customer analytics",
+        highlights: [
+          "NPS reporting automation",
+          "Interactive dashboards",
+          "Sample discard and bias analysis",
+          "Sankey visualizations for acquisition, renewal, assistance and claims processes"
+        ]
+      },
+      {
+        company: "Natura",
+        role: "Data Science Intern / Inventory Analytics",
+        area: "Inventory Control / Stock health",
+        highlights: [
+          "Stock health reporting automation",
+          "E1, JDA and SAP consolidation",
+          "Python, pandas and Excel transformations",
+          "Demand, inventory, excess and provision analysis"
+        ]
+      }
+    ],
     projects,
     demos,
     certificationStatus: {
       inProgress: "In progress",
       completed: "Completed"
     },
+    certificationDate: "Expected soon",
     courses,
     chat: chatContent
   }

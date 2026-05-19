@@ -22,8 +22,19 @@ const mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Martin Alvarez Martinez | Data Portfolio",
-  description: "Interactive portfolio for Martin Alvarez Martinez, Data Scientist and Data Engineer."
+  title: "Martín Alvarez Martinez | Data Scientist & Data Engineer",
+  description: "Interactive portfolio of Martín Alvarez Martinez, focused on data engineering, analytics automation, applied AI and business intelligence.",
+  keywords: [
+    "data scientist",
+    "data engineer",
+    "Next.js",
+    "Python",
+    "PySpark",
+    "Power BI",
+    "Groq",
+    "analytics",
+    "portfolio"
+  ]
 };
 
 export default function RootLayout({

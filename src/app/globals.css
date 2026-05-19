@@ -684,6 +684,72 @@ button, input {
   gap: 8px;
 }
 
+.experience-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.experience-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+}
+
+.experience-top {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 7px;
+}
+
+.experience-company {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.experience-role {
+  color: var(--amber);
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.experience-area {
+  color: var(--text2);
+  font-size: 10px;
+  line-height: 1.5;
+  margin-bottom: 9px;
+}
+
+.experience-list {
+  display: grid;
+  gap: 5px;
+  list-style: none;
+}
+
+.experience-list li {
+  color: var(--text2);
+  font-size: 10px;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+
+.experience-list li::before {
+  background: var(--amber);
+  border-radius: 50%;
+  content: "";
+  height: 4px;
+  left: 0;
+  position: absolute;
+  top: 6px;
+  width: 4px;
+}
+
 .project-card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -1067,6 +1133,10 @@ button, input {
   }
 
   .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .experience-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 

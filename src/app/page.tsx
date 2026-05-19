@@ -40,7 +40,7 @@ function Sidebar({ locale }: { locale: Locale }) {
     <aside className="sidebar">
       <div>
         <div className="avatar">{profile.initials}</div>
-        <div className="p-name">{profile.name}</div>
+        <div className="p-name">{content.profileName}</div>
         <div className="p-role">{content.profileRole}</div>
       </div>
 
@@ -116,6 +116,32 @@ function ProjectsSection({ locale }: { locale: Locale }) {
   );
 }
 
+function ExperienceSection({ locale }: { locale: Locale }) {
+  const content = localizedContent[locale];
+
+  return (
+    <section id="experience">
+      <SectionHeader title={content.sections.experience} />
+      <div className="experience-grid">
+        {content.experience.map((experience) => (
+          <article className="experience-card" key={experience.company}>
+            <div className="experience-top">
+              <h3 className="experience-company">{experience.company}</h3>
+              <span className="experience-role">{experience.role}</span>
+            </div>
+            <p className="experience-area">{experience.area}</p>
+            <ul className="experience-list">
+              {experience.highlights.map((highlight) => (
+                <li key={highlight}>{highlight}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function CertificationsSection({ locale }: { locale: Locale }) {
   const content = localizedContent[locale];
   const cert = certifications[0];
@@ -135,7 +161,7 @@ function CertificationsSection({ locale }: { locale: Locale }) {
               <span className="badge b-amber">
                 {cert.status === "in-progress" ? content.certificationStatus.inProgress : content.certificationStatus.completed}
               </span>
-              <span className="cc-date">{cert.date}</span>
+              <span className="cc-date">{content.certificationDate}</span>
             </div>
             {typeof cert.progress === "number" && (
               <div className="progress">
@@ -223,7 +249,7 @@ function MobileHeader({ locale, setLocale }: { locale: Locale; setLocale: (local
       <div className="m-profile">
         <div className="m-avatar">{profile.initials}</div>
         <div>
-          <div className="m-name">{profile.name}</div>
+          <div className="m-name">{content.profileName}</div>
           <div className="m-role">{content.profileRole}</div>
         </div>
       </div>
@@ -274,6 +300,7 @@ export default function Home() {
               key={`desktop-${locale}`}
               suggestions={content.suggestions}
             />
+            <ExperienceSection locale={locale} />
             <ProjectsSection locale={locale} />
             <CertificationsSection locale={locale} />
             <LiveDemosSection locale={locale} />
@@ -291,6 +318,7 @@ export default function Home() {
             mobile
             suggestions={content.suggestions}
           />
+          <ExperienceSection locale={locale} />
           <ProjectsSection locale={locale} />
           <CertificationsSection locale={locale} />
           <LiveDemosSection locale={locale} mobile />
