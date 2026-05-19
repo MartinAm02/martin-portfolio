@@ -3,7 +3,39 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
-import { abcDemoContent, type AbcProduct, chatContent, demoChatContexts, uiText } from "@/lib/data";
+import { ThemeControls } from "@/components/ThemeControls";
+import { abcDemoContent, type AbcProduct, chatContent, demoChatContexts, type Locale } from "@/lib/data";
+
+const copy = {
+  es: {
+    back: "← Volver al portafolio",
+    badge: "Demo funcional",
+    title: "Análisis ABC",
+    description: "Edita ingresos por producto y observa cómo se actualizan las clases Pareto para inventario o portafolios comerciales.",
+    product: "Producto",
+    revenue: "Ingresos",
+    share: "Acumulado",
+    className: "Clase",
+    languageLabel: "Idioma",
+    themeLabel: "Tema",
+    dark: "Oscuro",
+    light: "Claro"
+  },
+  en: {
+    back: "← Back to portfolio",
+    badge: abcDemoContent.badge,
+    title: abcDemoContent.title,
+    description: abcDemoContent.description,
+    product: "Product",
+    revenue: "Revenue",
+    share: "Share",
+    className: "Class",
+    languageLabel: "Language",
+    themeLabel: "Theme",
+    dark: "Dark",
+    light: "Light"
+  }
+};
 
 function getClass(cumulativeShare: number) {
   if (cumulativeShare <= 0.8) return "A";
@@ -12,7 +44,10 @@ function getClass(cumulativeShare: number) {
 }
 
 export default function AbcDemoPage() {
+  const [locale, setLocale] = useState<Locale>("es");
   const [products, setProducts] = useState<AbcProduct[]>(abcDemoContent.products);
+  const t = copy[locale];
+  const demoChat = demoChatContexts.abc[locale];
 
   const rows = useMemo(() => {
     const total = products.reduce((sum, product) => sum + product.revenue, 0);
@@ -24,12 +59,7 @@ export default function AbcDemoPage() {
         const share = total > 0 ? product.revenue / total : 0;
         cumulative += share;
 
-        return {
-          ...product,
-          share,
-          cumulative,
-          className: getClass(cumulative)
-        };
+        return { ...product, share, cumulative, className: getClass(cumulative) };
       });
   }, [products]);
 
@@ -42,11 +72,12 @@ export default function AbcDemoPage() {
   return (
     <main className="demo-page">
       <div className="demo-top">
-        <Link className="back-link" href="/">{uiText.backToPortfolio}</Link>
-        <span className="tag hi">{abcDemoContent.badge}</span>
+        <Link className="back-link" href="/">{t.back}</Link>
+        <ThemeControls labels={t} locale={locale} setLocale={setLocale} />
       </div>
-      <h1>{abcDemoContent.title}</h1>
-      <p>{abcDemoContent.description}</p>
+      <span className="tag hi">{t.badge}</span>
+      <h1>{t.title}</h1>
+      <p>{t.description}</p>
 
       <section className="tool-panel">
         <div className="field-grid">
@@ -71,10 +102,10 @@ export default function AbcDemoPage() {
         <table className="abc-table">
           <thead>
             <tr>
-              <th>Product</th>
-              <th>Revenue</th>
-              <th>Share</th>
-              <th>Class</th>
+              <th>{t.product}</th>
+              <th>{t.revenue}</th>
+              <th>{t.share}</th>
+              <th>{t.className}</th>
             </tr>
           </thead>
           <tbody>
@@ -83,9 +114,7 @@ export default function AbcDemoPage() {
                 <td>{row.name}</td>
                 <td>${row.revenue.toLocaleString("en-US")}</td>
                 <td>{Math.round(row.cumulative * 100)}%</td>
-                <td>
-                  <span className={`class-pill class-${row.className.toLowerCase()}`}>{row.className}</span>
-                </td>
+                <td><span className={`class-pill class-${row.className.toLowerCase()}`}>{row.className}</span></td>
               </tr>
             ))}
           </tbody>
@@ -93,9 +122,9 @@ export default function AbcDemoPage() {
       </section>
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChatContexts.abc.context}
-        initialMessage={demoChatContexts.abc.initialMessage}
-        suggestions={demoChatContexts.abc.suggestions}
+        contextPrompt={demoChat.context}
+        initialMessage={demoChat.initialMessage}
+        suggestions={demoChat.suggestions}
         title={demoChatContexts.abc.title}
       />
     </main>

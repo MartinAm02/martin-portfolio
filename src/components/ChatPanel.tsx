@@ -123,20 +123,29 @@ function ChatWindow({
   suggestions?: Suggestion[];
 }) {
 
+  const [initialMessage, ...conversation] = messages;
+
   return (
     <div className="chat-panel" aria-live="polite">
-      {suggestions.length > 0 && (
-        <div className="chat-quick-actions">
-          {suggestions.map((suggestion) => (
-            <button disabled={isLoading} key={suggestion.text} onClick={() => void sendMessage(suggestion.text)} type="button">
-              {suggestion.label}
-            </button>
-          ))}
-        </div>
-      )}
-
       <div className="chat-messages">
-        {messages.map((message, index) => (
+        {initialMessage && (
+          <div className={`chat-message ${initialMessage.role}`}>
+            {initialMessage.content}
+          </div>
+        )}
+
+        {suggestions.length > 0 && (
+          <div className="chat-quick-actions">
+            {suggestions.map((suggestion) => (
+              <button disabled={isLoading} key={suggestion.text} onClick={() => void sendMessage(suggestion.text)} type="button">
+                <span>{suggestion.label}</span>
+                <strong>{suggestion.text}</strong>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {conversation.map((message, index) => (
           <div className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
             {message.content}
           </div>
@@ -161,7 +170,14 @@ function ChatWindow({
   );
 }
 
-export function ChatPanel({ chatContent, contextPrompt, heroContent, initialMessage, mobile = false, suggestions }: ChatPanelProps) {
+export function ChatPanel({
+  chatContent,
+  contextPrompt,
+  heroContent,
+  initialMessage,
+  mobile = false,
+  suggestions
+}: ChatPanelProps) {
   const chat = useChat({ chatContent, contextPrompt, initialMessage });
 
   return (
@@ -173,24 +189,6 @@ export function ChatPanel({ chatContent, contextPrompt, heroContent, initialMess
       </h1>
       <p className="hero-p">{heroContent.description}</p>
 
-      <div className={mobile ? "mobile-sugs" : "sugs"}>
-        {suggestions.map((suggestion, index) => (
-          <button
-            className={mobile ? "sug mobile-sug" : "sug"}
-            key={suggestion.text}
-            type="button"
-            disabled={chat.isLoading}
-            onClick={() => void chat.sendMessage(suggestion.text)}
-          >
-            {mobile && <div className="mobile-icon">{index + 1}</div>}
-            <div>
-              <div className="sug-l">{suggestion.label}</div>
-              <div className="sug-t">{suggestion.text}</div>
-            </div>
-          </button>
-        ))}
-      </div>
-
       <ChatWindow
         chatContent={chatContent}
         input={chat.input}
@@ -200,6 +198,7 @@ export function ChatPanel({ chatContent, contextPrompt, heroContent, initialMess
         onSubmit={chat.handleSubmit}
         sendMessage={chat.sendMessage}
         setInput={chat.setInput}
+        suggestions={suggestions}
       />
     </section>
   );

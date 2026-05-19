@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { ChatPanel } from "@/components/ChatPanel";
+import { ThemeControls } from "@/components/ThemeControls";
 import {
   certifications,
   localizedContent,
@@ -31,29 +32,6 @@ function ProfileAvatar({ className }: { className: "avatar" | "m-avatar" }) {
   );
 }
 
-function LanguageToggle({
-  locale,
-  mobile = false,
-  setLocale
-}: {
-  locale: Locale;
-  mobile?: boolean;
-  setLocale: (locale: Locale) => void;
-}) {
-  const className = mobile ? "mlb" : "lb";
-
-  return (
-    <div className={mobile ? "m-lang" : "lang"} aria-label={localizedContent[locale].ui.languageLabel}>
-      <button className={`${className} ${locale === "es" ? "on" : ""}`} onClick={() => setLocale("es")} type="button">
-        ES
-      </button>
-      <button className={`${className} ${locale === "en" ? "on" : ""}`} onClick={() => setLocale("en")} type="button">
-        EN
-      </button>
-    </div>
-  );
-}
-
 function Sidebar({ locale }: { locale: Locale }) {
   const content = localizedContent[locale];
 
@@ -63,18 +41,6 @@ function Sidebar({ locale }: { locale: Locale }) {
         <ProfileAvatar className="avatar" />
         <div className="p-name">{content.profileName}</div>
         <div className="p-role">{content.profileRole}</div>
-      </div>
-
-      <div>
-        <div className="slabel">{content.ui.openToLabel}</div>
-        <div className="open-list">
-          {content.openTo.map((item) => (
-            <div className="open-item" key={item}>
-              <span className="open-dot" />
-              {item}
-            </div>
-          ))}
-        </div>
       </div>
 
       <div>
@@ -90,10 +56,35 @@ function Sidebar({ locale }: { locale: Locale }) {
       </div>
 
       <div>
+        <div className="slabel">{content.contactLabels.contact}</div>
+        <div className="contact-list">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a href={`tel:${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
+          <a href={profile.linkedin}>LinkedIn</a>
+          <a href={profile.github} rel="noreferrer" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <div>
+        <div className="slabel">{content.contactLabels.languages}</div>
+        <div className="language-list">
+          <span>{content.contactLabels.spanish}</span>
+          <span>{content.contactLabels.english}</span>
+        </div>
+      </div>
+
+      <div>
         <div className="slabel">{content.ui.stackLabel}</div>
-        <div className="tags">
-          {profile.stack.map((tag, index) => (
-            <span className={index < 3 ? "tag hi" : "tag"} key={tag}>{tag}</span>
+        <div className="stack-category-list">
+          {content.techCategories.map((category) => (
+            <div className="stack-category" key={category.label}>
+              <span>{category.label}</span>
+              <div className="tags">
+                {category.items.map((tag, index) => (
+                  <span className={index === 0 ? "tag hi" : "tag"} key={tag}>{tag}</span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -285,7 +276,7 @@ function MobileHeader({ locale, setLocale }: { locale: Locale; setLocale: (local
       </div>
       <div className="m-actions">
         <div className="ai-on"><div className="pulse" />{content.ui.aiStatus}</div>
-        <LanguageToggle locale={locale} mobile setLocale={setLocale} />
+        <ThemeControls labels={content.ui} locale={locale} mobile setLocale={setLocale} />
       </div>
     </div>
   );
@@ -321,7 +312,7 @@ export default function Home() {
               <div className="tbar-title">{content.ui.portfolioTitle}</div>
               <div className="tbar-sub">{content.profileHeadline}</div>
             </div>
-            <LanguageToggle locale={locale} setLocale={setLocale} />
+            <ThemeControls labels={content.ui} locale={locale} setLocale={setLocale} />
           </div>
           <div className="scroll">
             <ChatPanel

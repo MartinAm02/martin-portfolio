@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
+import { ThemeControls } from "@/components/ThemeControls";
 import { chatContent, demoChatContexts, type Locale } from "@/lib/data";
 
 type CommissionRow = {
@@ -62,6 +63,10 @@ type Copy = {
   }[];
   loading: string;
   error: string;
+  languageLabel: string;
+  themeLabel: string;
+  dark: string;
+  light: string;
 };
 
 const copy: Record<Locale, Copy> = {
@@ -118,7 +123,11 @@ const copy: Record<Locale, Copy> = {
       }
     ],
     loading: "Cargando datos...",
-    error: "No se pudieron cargar los datos del demo."
+    error: "No se pudieron cargar los datos del demo.",
+    languageLabel: "Idioma",
+    themeLabel: "Tema",
+    dark: "Oscuro",
+    light: "Claro"
   },
   en: {
     back: "← Back to portfolio",
@@ -173,7 +182,11 @@ const copy: Record<Locale, Copy> = {
       }
     ],
     loading: "Loading data...",
-    error: "Could not load demo data."
+    error: "Could not load demo data.",
+    languageLabel: "Language",
+    themeLabel: "Theme",
+    dark: "Dark",
+    light: "Light"
   }
 };
 
@@ -212,6 +225,7 @@ export default function PipelineDemoPage() {
   const [error, setError] = useState(false);
 
   const t = copy[locale];
+  const demoChat = demoChatContexts.pipeline[locale];
 
   useEffect(() => {
     let isMounted = true;
@@ -291,10 +305,7 @@ export default function PipelineDemoPage() {
     <main className="demo-page pipeline-page">
       <div className="demo-top">
         <Link className="back-link" href="/">{t.back}</Link>
-        <div className="lang pipeline-lang" aria-label="Language selector">
-          <button className={`lb ${locale === "es" ? "on" : ""}`} onClick={() => setLocale("es")} type="button">ES</button>
-          <button className={`lb ${locale === "en" ? "on" : ""}`} onClick={() => setLocale("en")} type="button">EN</button>
-        </div>
+        <ThemeControls labels={t} locale={locale} setLocale={setLocale} />
       </div>
 
       <section className="pipeline-hero">
@@ -403,9 +414,9 @@ export default function PipelineDemoPage() {
       )}
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChatContexts.pipeline.context}
-        initialMessage={demoChatContexts.pipeline.initialMessage}
-        suggestions={demoChatContexts.pipeline.suggestions}
+        contextPrompt={demoChat.context}
+        initialMessage={demoChat.initialMessage}
+        suggestions={demoChat.suggestions}
         title={demoChatContexts.pipeline.title}
       />
     </main>

@@ -3,9 +3,35 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
-import { chatContent, demoChatContexts, irisDemoContent, uiText } from "@/lib/data";
+import { ThemeControls } from "@/components/ThemeControls";
+import { chatContent, demoChatContexts, irisDemoContent, type Locale } from "@/lib/data";
 
 type IrisClass = "setosa" | "versicolor" | "virginica";
+
+const copy = {
+  es: {
+    back: "← Volver al portafolio",
+    badge: "Demo funcional",
+    title: "Clasificador Iris",
+    description: "Ajusta medidas de la flor y observa cómo un clasificador ligero estima la especie Iris.",
+    prediction: "Predicción",
+    languageLabel: "Idioma",
+    themeLabel: "Tema",
+    dark: "Oscuro",
+    light: "Claro"
+  },
+  en: {
+    back: "← Back to portfolio",
+    badge: irisDemoContent.badge,
+    title: irisDemoContent.title,
+    description: irisDemoContent.description,
+    prediction: "Prediction",
+    languageLabel: "Language",
+    themeLabel: "Theme",
+    dark: "Dark",
+    light: "Light"
+  }
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -25,10 +51,13 @@ function scoreIris(sepalLength: number, sepalWidth: number, petalLength: number,
 }
 
 export default function IrisDemoPage() {
+  const [locale, setLocale] = useState<Locale>("es");
   const [sepalLength, setSepalLength] = useState(irisDemoContent.measurements[0].initial);
   const [sepalWidth, setSepalWidth] = useState(irisDemoContent.measurements[1].initial);
   const [petalLength, setPetalLength] = useState(irisDemoContent.measurements[2].initial);
   const [petalWidth, setPetalWidth] = useState(irisDemoContent.measurements[3].initial);
+  const t = copy[locale];
+  const demoChat = demoChatContexts.iris[locale];
 
   const controls = [
     { ...irisDemoContent.measurements[0], value: sepalLength, setter: setSepalLength },
@@ -47,11 +76,12 @@ export default function IrisDemoPage() {
   return (
     <main className="demo-page">
       <div className="demo-top">
-        <Link className="back-link" href="/">{uiText.backToPortfolio}</Link>
-        <span className="tag hi">{irisDemoContent.badge}</span>
+        <Link className="back-link" href="/">{t.back}</Link>
+        <ThemeControls labels={t} locale={locale} setLocale={setLocale} />
       </div>
-      <h1>{irisDemoContent.title}</h1>
-      <p>{irisDemoContent.description}</p>
+      <span className="tag hi">{t.badge}</span>
+      <h1>{t.title}</h1>
+      <p>{t.description}</p>
 
       <section className="tool-panel">
         <div className="field-grid">
@@ -74,29 +104,17 @@ export default function IrisDemoPage() {
         </div>
 
         <div className="result-grid">
-          <div className="metric">
-            <span>Prediction</span>
-            <strong>{prediction}</strong>
-          </div>
-          <div className="metric">
-            <span>Setosa</span>
-            <strong>{scores.setosa}%</strong>
-          </div>
-          <div className="metric">
-            <span>Versicolor</span>
-            <strong>{scores.versicolor}%</strong>
-          </div>
-          <div className="metric">
-            <span>Virginica</span>
-            <strong>{scores.virginica}%</strong>
-          </div>
+          <div className="metric"><span>{t.prediction}</span><strong>{prediction}</strong></div>
+          <div className="metric"><span>Setosa</span><strong>{scores.setosa}%</strong></div>
+          <div className="metric"><span>Versicolor</span><strong>{scores.versicolor}%</strong></div>
+          <div className="metric"><span>Virginica</span><strong>{scores.virginica}%</strong></div>
         </div>
       </section>
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChatContexts.iris.context}
-        initialMessage={demoChatContexts.iris.initialMessage}
-        suggestions={demoChatContexts.iris.suggestions}
+        contextPrompt={demoChat.context}
+        initialMessage={demoChat.initialMessage}
+        suggestions={demoChat.suggestions}
         title={demoChatContexts.iris.title}
       />
     </main>

@@ -17,9 +17,9 @@ export type Profile = {
   headline: string;
   location: string;
   email: string;
+  phone: string;
   github: string;
   linkedin: string;
-  url: string;
   openTo: string[];
   stack: string[];
 };
@@ -40,7 +40,9 @@ export type Project = {
 
 export type ProfessionalExperience = {
   company: string;
+  period: string;
   role: string;
+  industry: string;
   area: string;
   highlights: string[];
 };
@@ -117,6 +119,16 @@ export type LocalizedContent = {
   profileRole: string;
   profileHeadline: string;
   openTo: string[];
+  contactLabels: {
+    contact: string;
+    languages: string;
+    spanish: string;
+    english: string;
+  };
+  techCategories: {
+    label: string;
+    items: string[];
+  }[];
   ui: {
     portfolioTitle: string;
     openToLabel: string;
@@ -128,6 +140,9 @@ export type LocalizedContent = {
     coursesLabel: string;
     nextCert: string;
     progress: string;
+    themeLabel: string;
+    dark: string;
+    light: string;
   };
   navigation: NavItem[];
   mobileNavigation: NavItem[];
@@ -149,6 +164,15 @@ export type LocalizedContent = {
   certificationDate: string;
   courses: Course[];
   chat: ChatContent;
+  contextCards: {
+    title: string;
+    text: string;
+    prompt: string;
+  }[];
+  askPanel: {
+    title: string;
+    items: string[];
+  };
 };
 
 export const profile: Profile = {
@@ -159,9 +183,9 @@ export const profile: Profile = {
   headline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
   location: "Mexico City",
   email: "martin_am02@outlook.com",
+  phone: "+52 55 1147 1565",
   github: "https://github.com/MartinAm02",
-  linkedin: "https://linkedin.com/in/placeholder",
-  url: "martinvalvarez.dev",
+  linkedin: "#",
   openTo: ["Data Engineering roles", "ML consulting", "Health data projects"],
   stack: ["Python", "TypeScript", "PySpark", "SQL", "Next.js", "Power BI", "R", "Groq", "Delta Lake"]
 };
@@ -266,27 +290,31 @@ export const projects: Project[] = [
 
 export const professionalExperience: ProfessionalExperience[] = [
   {
-    company: "MAPFRE México",
-    role: "Data Science Intern / Data Analyst Intern",
-    area: "Clientes, NPS y analítica de clientes",
+    company: "Natura",
+    period: "Jul 2025 – Mar 2026",
+    role: "Data Scientist Jr. — Operations & Inventory Control",
+    industry: "Consumer Goods",
+    area: "Inventory Control / Salud de stock",
     highlights: [
-      "Automatización de reportes de NPS con R, Excel y Shiny",
-      "Desarrollo de dashboards interactivos",
-      "Análisis de motivos de descarte y sesgo de muestra en encuestas NPS",
-      "Modelado y análisis de satisfacción de clientes",
-      "Visualizaciones tipo Sankey para entender caídas en procesos de contratación, renovación, asistencia y siniestros"
+      "Migración de sistemas legacy hacia Databricks/AWS",
+      "Consolidación de fuentes mediante SQL",
+      "Bots con Python y Selenium para extracción en JDA/E1 e integración con SAP",
+      "Automatización de reportes de inventario",
+      "Reducción de tiempos operativos de más de 3 horas a aproximadamente 15 minutos",
+      "Forecasting con XGBoost para inventarios regionales"
     ]
   },
   {
-    company: "Natura",
-    role: "Data Science Intern / Inventory Analytics",
-    area: "Inventory Control / Salud de stock",
+    company: "MAPFRE México",
+    period: "May 2024 – Jul 2025",
+    role: "Data Scientist Intern — Customer Analytics",
+    industry: "Insurance & Finance",
+    area: "Clientes, NPS y analítica de clientes",
     highlights: [
-      "Automatización de reportes de salud de stock",
-      "Consolidación de información de E1, JDA y SAP",
-      "Uso de Python, pandas y Excel para transformar reportes operativos",
-      "Análisis de demanda, órdenes de compra, inventario operativo, exceso y provisiones de pérdida",
-      "Reducción de tiempos de generación de reportes"
+      "Modelos Random Forest y XGBoost para satisfacción y riesgo de abandono",
+      "Diagramas Sankey con Plotly para customer journey",
+      "Consultas en Amazon Redshift para análisis de datamarts de clientes",
+      "Automatización y análisis NPS"
     ]
   }
 ];
@@ -381,6 +409,21 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     profileRole: "Data Scientist · Data Engineer",
     profileHeadline: "Data Scientist · Data Engineer · IA aplicada",
     openTo: ["Roles de Data Engineering", "Consultoría ML", "Analítica aplicada a negocio"],
+    contactLabels: {
+      contact: "Contacto",
+      languages: "Idiomas",
+      spanish: "Español: Nativo",
+      english: "Inglés: B2 — Conversacional"
+    },
+    techCategories: [
+      { label: "Lenguajes", items: ["Python", "SQL", "TypeScript", "Rust", "R"] },
+      { label: "Data Engineering", items: ["PySpark", "Delta Lake", "Trino", "Apache Spark", "dbt", "Kafka", "Great Expectations"] },
+      { label: "Cloud / Platforms", items: ["AWS", "Databricks", "Supabase", "Railway", "Vercel"] },
+      { label: "AI / ML", items: ["Groq", "LLaMA 3", "scikit-learn", "XGBoost", "Random Forest"] },
+      { label: "BI & Viz", items: ["Power BI", "DAX", "Power Query", "Plotly", "Streamlit"] },
+      { label: "Web & APIs", items: ["Next.js 15", "React", "FastAPI", "REST APIs", "Selenium"] },
+      { label: "Sistemas", items: ["SAP", "JDA", "JDE E1"] }
+    ],
     ui: {
       portfolioTitle: "Portafolio",
       openToLabel: "Abierto a",
@@ -391,12 +434,16 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       languageLabel: "Idioma",
       coursesLabel: "Cursos",
       nextCert: "Siguiente certificación próximamente",
-      progress: "Progreso"
+      progress: "Progreso",
+      themeLabel: "Tema",
+      dark: "Oscuro",
+      light: "Claro"
     },
     navigation: [
       { label: "Chat AI", href: "#chat", tone: "active" },
       { label: "Experiencia", href: "#experience" },
       { label: "Proyectos", href: "#projects" },
+      { label: "Demos en vivo", href: "#demos" },
       { label: "Certs y cursos", href: "#certs", tone: "cert" }
     ],
     mobileNavigation: [
@@ -426,25 +473,31 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     ],
     experience: [
       {
-        company: "MAPFRE México",
-        role: "Data Science Intern / Data Analyst Intern",
-        area: "Clientes, NPS y analítica de clientes",
+        company: "Natura",
+        period: "Jul 2025 – Mar 2026",
+        role: "Data Scientist Jr. — Operations & Inventory Control",
+        industry: "Consumer Goods",
+        area: "Inventory Control / Salud de stock",
         highlights: [
-          "Automatización de reportes NPS",
-          "Dashboards interactivos",
-          "Análisis de descarte y sesgo de muestra",
-          "Visualizaciones Sankey para procesos de contratación, renovación, asistencia y siniestros"
+          "Migración de sistemas legacy hacia Databricks/AWS",
+          "Consolidación de fuentes mediante SQL",
+          "Bots con Python y Selenium para extracción en JDA/E1 e integración con SAP",
+          "Automatización de reportes de inventario",
+          "Reducción de tiempos operativos de más de 3 horas a aproximadamente 15 minutos",
+          "Forecasting con XGBoost para inventarios regionales"
         ]
       },
       {
-        company: "Natura",
-        role: "Data Science Intern / Inventory Analytics",
-        area: "Inventory Control / Salud de stock",
+        company: "MAPFRE México",
+        period: "May 2024 – Jul 2025",
+        role: "Data Scientist Intern — Customer Analytics",
+        industry: "Insurance & Finance",
+        area: "Clientes, NPS y analítica de clientes",
         highlights: [
-          "Automatización de reportes de salud de stock",
-          "Consolidación E1, JDA y SAP",
-          "Transformación con Python, pandas y Excel",
-          "Análisis de demanda, inventario, exceso y provisiones"
+          "Modelos Random Forest y XGBoost para satisfacción y riesgo de abandono",
+          "Diagramas Sankey con Plotly para customer journey",
+          "Consultas en Amazon Redshift para análisis de datamarts de clientes",
+          "Automatización y análisis NPS"
         ]
       }
     ],
@@ -478,6 +531,22 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       missingKeyMessage: "GROQ_API_KEY no está configurada. Agrégala a .env.local y reinicia el servidor.",
       genericErrorMessage: "El chat no pudo responder ahora. Inténtalo de nuevo en un momento.",
       thinkingMessage: "Pensando..."
+    },
+    contextCards: [
+      { title: "Perfil", text: "Quién soy y qué hago", prompt: "Resume quién es Martín y qué hace profesionalmente." },
+      { title: "Experiencia", text: "MAPFRE, Natura y proyectos aplicados", prompt: "Háblame de la experiencia profesional de Martín en MAPFRE y Natura." },
+      { title: "Proyectos", text: "Valora, pipeline, dashboards y demos", prompt: "Explícame los proyectos principales de Martín." },
+      { title: "Stack", text: "Python, SQL, PySpark, Next.js e IA", prompt: "Compara y resume el stack técnico de Martín." }
+    ],
+    askPanel: {
+      title: "Qué puedes preguntar",
+      items: [
+        "Pregúntame por experiencia",
+        "Explícame un proyecto",
+        "Compara mi stack técnico",
+        "Abre un demo",
+        "Resume mi perfil para una vacante"
+      ]
     }
   },
   en: {
@@ -485,6 +554,21 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     profileRole: "Data Scientist · Data Engineer",
     profileHeadline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
     openTo: ["Data Engineering roles", "ML consulting", "Business analytics projects"],
+    contactLabels: {
+      contact: "Contact",
+      languages: "Languages",
+      spanish: "Spanish: Native",
+      english: "English: B2 — Conversational"
+    },
+    techCategories: [
+      { label: "Languages", items: ["Python", "SQL", "TypeScript", "Rust", "R"] },
+      { label: "Data Engineering", items: ["PySpark", "Delta Lake", "Trino", "Apache Spark", "dbt", "Kafka", "Great Expectations"] },
+      { label: "Cloud / Platforms", items: ["AWS", "Databricks", "Supabase", "Railway", "Vercel"] },
+      { label: "AI / ML", items: ["Groq", "LLaMA 3", "scikit-learn", "XGBoost", "Random Forest"] },
+      { label: "BI & Viz", items: ["Power BI", "DAX", "Power Query", "Plotly", "Streamlit"] },
+      { label: "Web & APIs", items: ["Next.js 15", "React", "FastAPI", "REST APIs", "Selenium"] },
+      { label: "Systems", items: ["SAP", "JDA", "JDE E1"] }
+    ],
     ui: {
       portfolioTitle: "Portfolio",
       openToLabel: "Open to",
@@ -495,7 +579,10 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       languageLabel: "Language",
       coursesLabel: "Courses",
       nextCert: "Next certification coming soon",
-      progress: "Progress"
+      progress: "Progress",
+      themeLabel: "Theme",
+      dark: "Dark",
+      light: "Light"
     },
     navigation,
     mobileNavigation,
@@ -512,28 +599,39 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       titleSuffix: "projects and technical stack.",
       description: "I build data solutions that automate reporting, explain business processes and turn operational data into actionable decisions."
     },
-    suggestions,
+    suggestions: [
+      { label: "Profile", text: "Tell me about Martin and what makes him stand out" },
+      { label: "Experience", text: "What companies has Martin worked at?" },
+      { label: "Projects", text: "Summarize Martin’s main projects" },
+      { label: "Stack", text: "What technical stack does Martin use?" }
+    ],
     experience: [
       {
-        company: "MAPFRE México",
-        role: "Data Science Intern / Data Analyst Intern",
-        area: "Clients, NPS and customer analytics",
+        company: "Natura",
+        period: "Jul 2025 – Mar 2026",
+        role: "Data Scientist Jr. — Operations & Inventory Control",
+        industry: "Consumer Goods",
+        area: "Inventory Control / Stock health",
         highlights: [
-          "NPS reporting automation",
-          "Interactive dashboards",
-          "Sample discard and bias analysis",
-          "Sankey visualizations for acquisition, renewal, assistance and claims processes"
+          "Migration from legacy systems to Databricks/AWS",
+          "SQL-based source consolidation",
+          "Python and Selenium bots for JDA/E1 extraction and SAP integration",
+          "Inventory reporting automation",
+          "Operational reporting reduced from more than 3 hours to about 15 minutes",
+          "XGBoost forecasting for regional inventories"
         ]
       },
       {
-        company: "Natura",
-        role: "Data Science Intern / Inventory Analytics",
-        area: "Inventory Control / Stock health",
+        company: "MAPFRE México",
+        period: "May 2024 – Jul 2025",
+        role: "Data Scientist Intern — Customer Analytics",
+        industry: "Insurance & Finance",
+        area: "Customer analytics and NPS",
         highlights: [
-          "Stock health reporting automation",
-          "E1, JDA and SAP consolidation",
-          "Python, pandas and Excel transformations",
-          "Demand, inventory, excess and provision analysis"
+          "Random Forest and XGBoost models for satisfaction and churn-risk signals",
+          "Plotly Sankey diagrams for customer journey analysis",
+          "Amazon Redshift queries for customer datamart analysis",
+          "NPS automation and analytics"
         ]
       }
     ],
@@ -545,7 +643,26 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     },
     certificationDate: "Expected soon",
     courses,
-    chat: chatContent
+    chat: {
+      ...chatContent,
+      initialAssistantMessage: "Hi, I can answer questions about Martín’s profile, experience, projects, stack and demos."
+    },
+    contextCards: [
+      { title: "Profile", text: "Who I am and what I build", prompt: "Summarize who Martin is and what he builds professionally." },
+      { title: "Experience", text: "MAPFRE, Natura and applied projects", prompt: "Tell me about Martin's professional experience at MAPFRE and Natura." },
+      { title: "Projects", text: "Valora, pipeline, dashboards and demos", prompt: "Explain Martin's main projects." },
+      { title: "Stack", text: "Python, SQL, PySpark, Next.js and AI", prompt: "Compare and summarize Martin's technical stack." }
+    ],
+    askPanel: {
+      title: "What you can ask",
+      items: [
+        "Ask about experience",
+        "Explain a project",
+        "Compare my tech stack",
+        "Open a demo",
+        "Summarize my profile for a role"
+      ]
+    }
   }
 };
 
@@ -559,7 +676,6 @@ Profile:
 - Email: ${profile.email}
 - GitHub: ${profile.github}
 - LinkedIn: ${profile.linkedin}
-- Website: ${profile.url}
 
 Core stack:
 ${profile.stack.map((item) => `- ${item}`).join("\n")}
@@ -587,37 +703,69 @@ Behavior:
 export const demoChatContexts = {
   iris: {
     title: "Iris Classifier",
-    context: "Current demo context: Iris Classifier. Explain classification, the measurement sliders, probabilities, setosa/versicolor/virginica outputs and the idea of a lightweight browser-side model. Do not claim this page runs a production ML service.",
-    initialMessage: "Ask me about the Iris classifier, sliders, probabilities or how the model decides between species.",
-    suggestions: [
-      { label: "Model", text: "How does this Iris classifier work?" },
-      { label: "Sliders", text: "What do the sliders change?" },
-      { label: "Output", text: "How should I interpret the probabilities?" }
-    ]
+    es: {
+      context: "Idioma actual: español. Demo actual: Iris Classifier. Puedo explicarte cómo funciona este clasificador Iris, qué significan los sliders, cómo interpretar probabilidades y cómo se conecta con machine learning.",
+      initialMessage: "Puedo explicarte cómo funciona este clasificador Iris, qué significan los sliders, cómo interpretar probabilidades y cómo se conecta con machine learning.",
+      suggestions: [
+        { label: "Modelo", text: "¿Cómo funciona este clasificador Iris?" },
+        { label: "Sliders", text: "¿Qué significan los sliders?" },
+        { label: "Probabilidades", text: "¿Cómo interpreto las probabilidades?" }
+      ]
+    },
+    en: {
+      context: "Current language: English. Current demo: Iris Classifier. I can explain how this Iris classifier works, what the sliders mean, how to interpret probabilities and how it connects to machine learning.",
+      initialMessage: "I can explain how this Iris classifier works, what the sliders mean, how to interpret probabilities and how it connects to machine learning.",
+      suggestions: [
+        { label: "Model", text: "How does this Iris classifier work?" },
+        { label: "Sliders", text: "What do the sliders mean?" },
+        { label: "Output", text: "How should I interpret the probabilities?" }
+      ]
+    }
   },
   abc: {
     title: "ABC Analysis",
-    context: "Current demo context: ABC Analysis. Explain Pareto analysis, A/B/C segmentation, cumulative revenue share and how it helps prioritize inventory or product portfolios.",
-    initialMessage: "Ask me about ABC analysis, Pareto segmentation or inventory prioritization.",
-    suggestions: [
-      { label: "ABC", text: "What is ABC analysis?" },
-      { label: "Pareto", text: "How does Pareto segmentation work here?" },
-      { label: "Inventory", text: "How would this help inventory decisions?" }
-    ]
+    es: {
+      context: "Idioma actual: español. Demo actual: ABC Analysis. Puedo explicarte el análisis ABC, el principio de Pareto, la segmentación A/B/C y cómo se usa para decisiones de inventario.",
+      initialMessage: "Puedo explicarte el análisis ABC, el principio de Pareto, la segmentación A/B/C y cómo se usa para decisiones de inventario.",
+      suggestions: [
+        { label: "ABC", text: "¿Qué es el análisis ABC?" },
+        { label: "Pareto", text: "¿Cómo funciona el principio de Pareto aquí?" },
+        { label: "Inventario", text: "¿Cómo ayuda a decisiones de inventario?" }
+      ]
+    },
+    en: {
+      context: "Current language: English. Current demo: ABC Analysis. I can explain ABC analysis, the Pareto principle, A/B/C segmentation and how it supports inventory decisions.",
+      initialMessage: "I can explain ABC analysis, the Pareto principle, A/B/C segmentation and how it supports inventory decisions.",
+      suggestions: [
+        { label: "ABC", text: "What is ABC analysis?" },
+        { label: "Pareto", text: "How does Pareto segmentation work here?" },
+        { label: "Inventory", text: "How would this help inventory decisions?" }
+      ]
+    }
   },
   pipeline: {
     title: "Sales Commission Pipeline",
-    context: "Current demo context: Sales Commission Pipeline. Explain Bronze to Silver to Gold, PySpark transforms, Delta Lake storage, Great Expectations quality checks, JSON export and why the Vercel demo uses precomputed data only.",
-    initialMessage: "Ask me about the pipeline architecture, quality checks, Delta layers or the static JSON demo.",
-    suggestions: [
-      { label: "Layers", text: "Explain Bronze, Silver and Gold in this pipeline." },
-      { label: "Quality", text: "What quality checks are used?" },
-      { label: "Vercel", text: "Why does this demo use precomputed JSON?" }
-    ]
+    es: {
+      context: "Idioma actual: español. Demo actual: Sales Commission Pipeline. Puedo explicarte la arquitectura Bronze → Silver → Gold, PySpark, Delta Lake, Great Expectations, el export JSON y cómo se conecta con este demo web.",
+      initialMessage: "Puedo explicarte la arquitectura Bronze → Silver → Gold, PySpark, Delta Lake, Great Expectations, el export JSON y cómo se conecta con este demo web.",
+      suggestions: [
+        { label: "Capas", text: "Explícame Bronze, Silver y Gold en este pipeline." },
+        { label: "Calidad", text: "¿Qué validaciones de calidad usa?" },
+        { label: "JSON", text: "¿Por qué este demo usa JSON precomputado?" }
+      ]
+    },
+    en: {
+      context: "Current language: English. Current demo: Sales Commission Pipeline. I can explain the Bronze → Silver → Gold architecture, PySpark, Delta Lake, Great Expectations, JSON export and how it connects to this web demo.",
+      initialMessage: "I can explain the Bronze → Silver → Gold architecture, PySpark, Delta Lake, Great Expectations, JSON export and how it connects to this web demo.",
+      suggestions: [
+        { label: "Layers", text: "Explain Bronze, Silver and Gold in this pipeline." },
+        { label: "Quality", text: "What quality checks are used?" },
+        { label: "JSON", text: "Why does this demo use precomputed JSON?" }
+      ]
+    }
   }
 } satisfies Record<string, {
   title: string;
-  context: string;
-  initialMessage: string;
-  suggestions: Suggestion[];
+  es: { context: string; initialMessage: string; suggestions: Suggestion[] };
+  en: { context: string; initialMessage: string; suggestions: Suggestion[] };
 }>;
