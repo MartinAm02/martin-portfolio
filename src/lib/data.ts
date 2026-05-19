@@ -178,7 +178,7 @@ export type LocalizedContent = {
 export const profile: Profile = {
   name: "Martín Alvarez Martinez",
   initials: "M",
-  photoUrl: "/images/martin-profile.jpg",
+  photoUrl: "/images/martin-profile.jpeg",
   role: "Data Scientist · Data Engineer",
   headline: "Data Scientist · Data Engineer · Agentic Engineer · Builder",
   location: "Mexico City",
