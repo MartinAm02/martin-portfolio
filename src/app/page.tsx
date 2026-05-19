@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatPanel } from "@/components/ChatPanel";
 import { ThemeControls } from "@/components/ThemeControls";
 import {
@@ -97,6 +97,10 @@ function Sidebar({ locale }: { locale: Locale }) {
   );
 }
 
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="section-header">
@@ -159,7 +163,7 @@ function CertificationsSection({ locale }: { locale: Locale }) {
   const cert = certifications[0];
 
   return (
-    <section id="certs">
+    <section id="certifications">
       <SectionHeader title={content.sections.certifications} />
       <div className="cert-grid">
         <article className="cc featured">
@@ -262,37 +266,158 @@ function LiveDemosSection({ locale, mobile = false }: { locale: Locale; mobile?:
   );
 }
 
-function MobileHeader({ locale, setLocale }: { locale: Locale; setLocale: (locale: Locale) => void }) {
+function MobileDrawer({
+  isOpen,
+  locale,
+  onClose
+}: {
+  isOpen: boolean;
+  locale: Locale;
+  onClose: () => void;
+}) {
   const content = localizedContent[locale];
+  const navItems = [
+    { label: "Chat", target: "chat" },
+    { label: locale === "es" ? "Experiencia" : "Experience", target: "experience" },
+    { label: locale === "es" ? "Proyectos" : "Projects", target: "projects" },
+    { label: locale === "es" ? "Demos en vivo" : "Live demos", target: "demos" },
+    { label: locale === "es" ? "Certs y cursos" : "Certs & courses", target: "certifications" },
+    { label: "Stack", target: "mobile-stack" }
+  ];
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  function navigate(target: string) {
+    if (target === "mobile-stack") {
+      document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      scrollToSection(target);
+    }
+    onClose();
+  }
 
   return (
-    <div className="m-header">
-      <div className="m-profile">
-        <ProfileAvatar className="m-avatar" />
-        <div>
-          <div className="m-name">{content.profileName}</div>
-          <div className="m-role">{content.profileRole}</div>
+    <div aria-hidden={!isOpen} className={`mobile-drawer-layer ${isOpen ? "open" : ""}`}>
+      <button aria-label="Close menu overlay" className="mobile-drawer-backdrop" onClick={onClose} type="button" />
+      <aside aria-label="Mobile profile menu" className="mobile-drawer" role="dialog">
+        <div className="mobile-drawer-head">
+          <div className="m-profile">
+            <ProfileAvatar className="m-avatar" />
+            <div>
+              <div className="m-name">{content.profileName}</div>
+              <div className="m-role">{content.profileRole}</div>
+            </div>
+          </div>
+          <button aria-label="Close menu" className="drawer-close" onClick={onClose} type="button">×</button>
         </div>
-      </div>
-      <div className="m-actions">
-        <div className="ai-on"><div className="pulse" />{content.ui.aiStatus}</div>
-        <ThemeControls labels={content.ui} locale={locale} mobile setLocale={setLocale} />
-      </div>
+
+        <div className="drawer-section">
+          <div className="slabel">{content.contactLabels.contact}</div>
+          <div className="contact-list">
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <a href={`tel:${profile.phone.replace(/\s/g, "")}`}>{profile.phone}</a>
+            <a href={profile.linkedin}>LinkedIn</a>
+            <a href={profile.github} rel="noreferrer" target="_blank">GitHub</a>
+          </div>
+        </div>
+
+        <div className="drawer-section">
+          <div className="slabel">{content.ui.navigateLabel}</div>
+          <div className="drawer-nav">
+            {navItems.map((item) => (
+              <button key={item.target} onClick={() => navigate(item.target)} type="button">{item.label}</button>
+            ))}
+          </div>
+        </div>
+
+        <div className="drawer-section">
+          <div className="slabel">{content.contactLabels.languages}</div>
+          <div className="language-list">
+            <span>{content.contactLabels.spanish}</span>
+            <span>{content.contactLabels.english}</span>
+          </div>
+        </div>
+
+        <div className="drawer-section" id="mobile-stack">
+          <div className="slabel">{content.ui.stackLabel}</div>
+          <div className="stack-category-list">
+            {content.techCategories.map((category) => (
+              <div className="stack-category" key={category.label}>
+                <span>{category.label}</span>
+                <div className="tags">
+                  {category.items.map((tag, index) => (
+                    <span className={index === 0 ? "tag hi" : "tag"} key={tag}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }
 
-function BottomNav({ locale }: { locale: Locale }) {
-  const icons = ["◆", "▦", "↓", "◎"];
+function MobileHeader({
+  locale,
+  setLocale
+}: {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+}) {
   const content = localizedContent[locale];
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  return (
+    <>
+      <div className="m-header">
+        <button aria-label="Open menu" className="mobile-menu-button" onClick={() => setIsDrawerOpen(true)} type="button">☰</button>
+        <div className="m-profile">
+          <ProfileAvatar className="m-avatar" />
+          <div>
+            <div className="m-name">{content.profileName}</div>
+            <div className="m-role">{content.profileRole}</div>
+          </div>
+        </div>
+        <div className="m-actions">
+          <div className="ai-on"><div className="pulse" />{content.ui.aiStatus}</div>
+          <ThemeControls labels={content.ui} locale={locale} mobile setLocale={setLocale} />
+        </div>
+      </div>
+      <MobileDrawer isOpen={isDrawerOpen} locale={locale} onClose={() => setIsDrawerOpen(false)} />
+    </>
+  );
+}
+
+function BottomNav() {
+  const icons = ["◆", "▦", "↓", "◎"];
+  const navItems = [
+    { icon: icons[0], label: "Chat", target: "chat", tone: "active" },
+    { icon: icons[1], label: "Exp", target: "experience" },
+    { icon: icons[2], label: "Demos", target: "demos" },
+    { icon: icons[3], label: "Certs", target: "certifications", tone: "cert" }
+  ];
 
   return (
     <nav className="m-nav" aria-label="Mobile sections">
-      {content.mobileNavigation.map((item, index) => (
-        <a className={`m-nav-item ${item.tone ?? ""}`} href={item.href} key={item.label}>
-          <span className="m-nav-icon">{icons[index]}</span>
+      {navItems.map((item) => (
+        <button className={`m-nav-item ${item.tone ?? ""}`} key={item.target} onClick={() => scrollToSection(item.target)} type="button">
+          <span className="m-nav-icon">{item.icon}</span>
           {item.label}
-        </a>
+        </button>
       ))}
     </nav>
   );
@@ -344,7 +469,7 @@ export default function Home() {
           <CertificationsSection locale={locale} />
           <LiveDemosSection locale={locale} mobile />
         </div>
-        <BottomNav locale={locale} />
+        <BottomNav />
       </div>
     </main>
   );

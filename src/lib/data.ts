@@ -185,7 +185,7 @@ export const profile: Profile = {
   email: "martin_am02@outlook.com",
   phone: "+52 55 1147 1565",
   github: "https://github.com/MartinAm02",
-  linkedin: "#",
+  linkedin: "https://www.linkedin.com/feed/",
   openTo: ["Data Engineering roles", "ML consulting", "Health data projects"],
   stack: ["Python", "TypeScript", "PySpark", "SQL", "Next.js", "Power BI", "R", "Groq", "Delta Lake"]
 };
