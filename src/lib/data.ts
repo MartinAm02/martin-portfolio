@@ -338,12 +338,11 @@ export const demos: Demo[] = [
     tags: ["Python", "pandas"]
   },
   {
-    title: "Big Data Pipeline",
+    title: "Sales Commission Pipeline",
     category: "Coming soon",
-    description: "Spark + Delta Lake architecture",
+    description: "PySpark + Delta Lake commission demo",
     href: "/demos/pipeline",
-    tags: ["Spark", "Delta"],
-    disabled: true
+    tags: ["Spark", "Delta"]
   }
 ];
 
@@ -456,7 +455,7 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
     demos: [
       { title: "Iris Classifier", category: "ML · Clasificación", description: "Regresión logística y probabilidades en tiempo real", href: "/demos/iris", tags: ["Python", "sklearn"] },
       { title: "ABC Analysis", category: "Analítica · Ops", description: "Segmentación Pareto para inventario", href: "/demos/abc", tags: ["Python", "pandas"] },
-      { title: "Big Data Pipeline", category: "Próximamente", description: "Arquitectura Spark + Delta Lake", href: "/demos/pipeline", tags: ["Spark", "Delta"], disabled: true }
+      { title: "Pipeline de Comisiones", category: "Data Engineering · Demo", description: "PySpark + Delta Lake con datos precomputados", href: "/demos/pipeline", tags: ["Spark", "Delta"] }
     ],
     certificationStatus: {
       inProgress: "En progreso",

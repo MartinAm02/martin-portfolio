@@ -1099,6 +1099,167 @@ button, input {
 .class-b { background: var(--blue-dim); color: var(--blue); }
 .class-c { background: var(--green-dim); color: var(--green); }
 
+.pipeline-page {
+  max-width: 1180px;
+}
+
+.pipeline-lang {
+  align-self: flex-start;
+}
+
+.pipeline-hero {
+  margin-bottom: 18px;
+}
+
+.pipeline-hero h1 {
+  margin: 10px 0 8px;
+}
+
+.pipeline-alert {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text2);
+  font-size: 13px;
+  padding: 14px;
+}
+
+.pipeline-controls {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.pipeline-controls label {
+  color: var(--text2);
+  display: grid;
+  font-size: 11px;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.pipeline-controls select {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--sans);
+  padding: 10px 12px;
+}
+
+.pipeline-kpis {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.pipeline-section-title {
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.quota-chart {
+  display: grid;
+  gap: 12px;
+}
+
+.quota-row {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 82px 1fr 82px;
+}
+
+.quota-row span,
+.quota-row strong {
+  color: var(--text2);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.quota-row strong {
+  color: var(--text);
+  text-align: right;
+}
+
+.quota-track {
+  background: var(--bg3);
+  border-radius: 999px;
+  height: 9px;
+  overflow: hidden;
+}
+
+.quota-bar {
+  background: linear-gradient(90deg, var(--amber), var(--amber2));
+  border-radius: inherit;
+  height: 100%;
+}
+
+.pipeline-table-wrap {
+  overflow-x: auto;
+}
+
+.pipeline-table {
+  min-width: 820px;
+}
+
+.pipeline-table tr.outlier-high td {
+  background: rgba(232, 160, 48, 0.05);
+}
+
+.pipeline-table tr.outlier-low td {
+  background: rgba(74, 144, 232, 0.05);
+}
+
+.outlier-pill-high {
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+
+.outlier-pill-low {
+  background: var(--blue-dim);
+  color: var(--blue);
+}
+
+.outlier-pill-normal {
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+.pipeline-architecture-head {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.architecture-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.architecture-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+}
+
+.architecture-card h3 {
+  color: var(--amber);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.architecture-card p {
+  color: var(--text2);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
 @media (min-width: 420px) {
   .ai-on {
     display: flex;
@@ -1109,6 +1270,11 @@ button, input {
   }
 
   .cert-grid, .result-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pipeline-controls,
+  .pipeline-kpis {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1148,5 +1314,13 @@ button, input {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  .pipeline-kpis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .architecture-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
