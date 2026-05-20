@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
+import { DemoImpact } from "@/components/DemoImpact";
 import { ThemeControls } from "@/components/ThemeControls";
 import { abcDemoContent, type AbcProduct, chatContent, demoChatContexts, type Locale } from "@/lib/data";
+import { ABC_DEMO_PROMPT, demoImpactContent } from "@/lib/demoPrompts";
 
 type AbcFilter = "ALL" | "A" | "B" | "C";
 type AbcClass = "A" | "B" | "C";
@@ -162,6 +164,7 @@ export default function AbcDemoPage() {
   const [demandChange, setDemandChange] = useState(0);
   const t = copy[locale];
   const demoChat = demoChatContexts.abc[locale];
+  const contextPrompt = `${demoChat.context}\n\n${ABC_DEMO_PROMPT}`;
 
   const rows = useMemo(() => buildRows(products), [products]);
   const filteredRows = useMemo(
@@ -213,6 +216,8 @@ export default function AbcDemoPage() {
         <h2 className="pipeline-section-title">{t.businessTitle}</h2>
         <p>{t.businessText}</p>
       </section>
+
+      <DemoImpact content={demoImpactContent.abc[locale]} />
 
       <section className="tool-panel abc-main-panel">
         <div className="abc-toolbar">
@@ -330,7 +335,7 @@ export default function AbcDemoPage() {
 
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChat.context}
+        contextPrompt={contextPrompt}
         initialMessage={demoChat.initialMessage}
         suggestions={demoChat.suggestions}
         title={demoChatContexts.abc.title}

@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
+import { DemoImpact } from "@/components/DemoImpact";
 import { ThemeControls } from "@/components/ThemeControls";
 import { chatContent, demoChatContexts, type Locale } from "@/lib/data";
+import { demoImpactContent, PIPELINE_DEMO_PROMPT } from "@/lib/demoPrompts";
 
 type CommissionRow = {
   rep_id: string;
@@ -394,6 +396,7 @@ export default function PipelineDemoPage() {
 
   const t = copy[locale];
   const demoChat = demoChatContexts.pipeline[locale];
+  const contextPrompt = `${demoChat.context}\n\n${PIPELINE_DEMO_PROMPT}`;
 
   useEffect(() => {
     let isMounted = true;
@@ -481,6 +484,8 @@ export default function PipelineDemoPage() {
       </section>
 
       {rows.length === 0 && <PendingResult file="public/data/commissions.json" t={t} />}
+
+      <DemoImpact content={demoImpactContent.pipeline[locale]} />
 
       {rows.length > 0 && (
         <>
@@ -776,7 +781,7 @@ export default function PipelineDemoPage() {
 
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChat.context}
+        contextPrompt={contextPrompt}
         initialMessage={demoChat.initialMessage}
         suggestions={demoChat.suggestions}
         title={demoChatContexts.pipeline.title}

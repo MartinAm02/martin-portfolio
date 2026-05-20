@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FloatingDemoChat } from "@/components/ChatPanel";
+import { DemoImpact } from "@/components/DemoImpact";
 import { ThemeControls } from "@/components/ThemeControls";
 import { chatContent, demoChatContexts, irisDemoContent, type Locale } from "@/lib/data";
+import { demoImpactContent, IRIS_DEMO_PROMPT } from "@/lib/demoPrompts";
 
 type IrisClass = "setosa" | "versicolor" | "virginica";
 
@@ -58,6 +60,7 @@ export default function IrisDemoPage() {
   const [petalWidth, setPetalWidth] = useState(irisDemoContent.measurements[3].initial);
   const t = copy[locale];
   const demoChat = demoChatContexts.iris[locale];
+  const contextPrompt = `${demoChat.context}\n\n${IRIS_DEMO_PROMPT}`;
 
   const controls = [
     { ...irisDemoContent.measurements[0], value: sepalLength, setter: setSepalLength },
@@ -110,9 +113,10 @@ export default function IrisDemoPage() {
           <div className="metric"><span>Virginica</span><strong>{scores.virginica}%</strong></div>
         </div>
       </section>
+      <DemoImpact content={demoImpactContent.iris[locale]} />
       <FloatingDemoChat
         chatContent={chatContent}
-        contextPrompt={demoChat.context}
+        contextPrompt={contextPrompt}
         initialMessage={demoChat.initialMessage}
         suggestions={demoChat.suggestions}
         title={demoChatContexts.iris.title}

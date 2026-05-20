@@ -1238,6 +1238,37 @@ button, input {
   padding: 18px;
 }
 
+.demo-impact {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.demo-impact-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.demo-impact-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 13px;
+}
+
+.demo-impact-card h3 {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.demo-impact-card p {
+  color: var(--text2);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
 .field-grid {
   display: grid;
   gap: 14px;
@@ -1867,6 +1898,10 @@ button, input {
 
   .architecture-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .demo-impact-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .trino-card-grid {

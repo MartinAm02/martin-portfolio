@@ -711,18 +711,20 @@ export const demoChatContexts = {
       context: "Idioma actual: español. Demo actual: Iris Classifier. Puedo explicarte cómo funciona este clasificador Iris, qué significan los sliders, cómo interpretar probabilidades y cómo se conecta con machine learning.",
       initialMessage: "Puedo explicarte cómo funciona este clasificador Iris, qué significan los sliders, cómo interpretar probabilidades y cómo se conecta con machine learning.",
       suggestions: [
-        { label: "Modelo", text: "¿Cómo funciona este clasificador Iris?" },
-        { label: "Sliders", text: "¿Qué significan los sliders?" },
-        { label: "Probabilidades", text: "¿Cómo interpreto las probabilidades?" }
+        { label: "Reclutador", text: "Soy reclutador, ¿por qué importa este demo?" },
+        { label: "Simple", text: "Explícame la incertidumbre fácil" },
+        { label: "Técnico", text: "¿Qué demuestra técnicamente?" },
+        { label: "Negocio", text: "¿Dónde se usaría en empresa?" }
       ]
     },
     en: {
       context: "Current language: English. Current demo: Iris Classifier. I can explain how this Iris classifier works, what the sliders mean, how to interpret probabilities and how it connects to machine learning.",
       initialMessage: "I can explain how this Iris classifier works, what the sliders mean, how to interpret probabilities and how it connects to machine learning.",
       suggestions: [
-        { label: "Model", text: "How does this Iris classifier work?" },
-        { label: "Sliders", text: "What do the sliders mean?" },
-        { label: "Output", text: "How should I interpret the probabilities?" }
+        { label: "Recruiter", text: "As a recruiter, why does this matter?" },
+        { label: "Simple", text: "Explain uncertainty simply" },
+        { label: "Technical", text: "What does this show technically?" },
+        { label: "Business", text: "Where would this apply in business?" }
       ]
     }
   },
@@ -732,20 +734,20 @@ export const demoChatContexts = {
       context: "Idioma actual: español. Demo actual: ABC Analysis. Contexto: este demo replica un módulo de gestión de inventario para Valora Consultoría de Datos con un catálogo simulado de insumos odontológicos. Puedes explicar qué es ABC analysis, el principio de Pareto, diferencias entre Clase A, B y C, recomendaciones por clase, el escenario what-if de sensibilidad de demanda, y cómo se conecta con inventario, compras, abastecimiento, stock de seguridad y operación. No afirmes que está desplegado en clínicas reales.",
       initialMessage: "Puedo explicarte el análisis ABC, Pareto, clases A/B/C, recomendaciones por clase y el escenario what-if para inventario.",
       suggestions: [
-        { label: "ABC", text: "¿Qué es el análisis ABC?" },
-        { label: "Clases", text: "¿Cuál es la diferencia entre productos A, B y C?" },
-        { label: "What-if", text: "¿Cómo interpreto el escenario what-if de demanda?" },
-        { label: "Valora", text: "¿Cómo se conecta este módulo con inventario y compras en Valora?" }
+        { label: "Reclutador", text: "Soy reclutador, ¿qué demuestra este demo?" },
+        { label: "Compras", text: "¿Cómo ayuda a compras?" },
+        { label: "Clase C", text: "¿Qué haría con productos Clase C?" },
+        { label: "Producción", text: "¿Qué faltaría para producción?" }
       ]
     },
     en: {
       context: "Current language: English. Current demo: ABC Analysis. Context: this demo replicates an inventory management module for Valora Data Consulting using a simulated dental supplies catalog. You can explain ABC analysis, the Pareto principle, differences between Class A, B and C, recommendations by class, the demand sensitivity what-if scenario, and how it connects to inventory, procurement, safety stock and operations. Do not claim it is deployed in real clinics.",
       initialMessage: "I can explain ABC analysis, Pareto, A/B/C classes, class-based recommendations and the inventory what-if scenario.",
       suggestions: [
-        { label: "ABC", text: "What is ABC analysis?" },
-        { label: "Classes", text: "What is the difference between Class A, B and C products?" },
-        { label: "What-if", text: "How should I interpret the demand what-if scenario?" },
-        { label: "Valora", text: "How does this module connect to inventory and procurement at Valora?" }
+        { label: "Recruiter", text: "As a recruiter, what does this demo show?" },
+        { label: "Procurement", text: "How does it help procurement?" },
+        { label: "Class C", text: "What would you do with Class C products?" },
+        { label: "Production", text: "What is missing for production?" }
       ]
     }
   },
@@ -755,20 +757,20 @@ export const demoChatContexts = {
       context: "Idioma actual: español. Demo actual: Sales Commission Pipeline. Contexto validado: el pipeline pesado corre fuera de Vercel; Vercel solo consume JSONs precomputados desde public/data. Puedes explicar Bronze → Silver → Gold, Great Expectations con 10/10 checks, Fase 9A Trino healthcheck con SELECT 1 en Codespaces, Fase 9B SQL real sobre products.parquet stageado en memory, Fase 9C federation-style staged fallback, y la diferencia entre federación directa Delta + SQLite y staged fallback. No digas que la federación directa Delta connector + SQLite connector ya está validada; queda como hardening futuro.",
       initialMessage: "Puedo explicarte la arquitectura Bronze → Silver → Gold, Great Expectations 10/10, Trino en Codespaces y por qué este demo web usa JSONs precomputados.",
       suggestions: [
-        { label: "Capas", text: "Explícame Bronze, Silver y Gold en este pipeline." },
-        { label: "Calidad", text: "¿Qué significa que Great Expectations pasó 10/10 checks?" },
-        { label: "Trino", text: "Explícame las fases 9A, 9B y 9C de Trino en Codespaces." },
-        { label: "Fallback", text: "¿Cuál es la diferencia entre federación directa y staged fallback?" }
+        { label: "Reclutador", text: "Soy reclutador, ¿por qué este pipeline importa?" },
+        { label: "Negocio", text: "Explícame esto para negocio" },
+        { label: "Técnico", text: "¿Qué parte es más técnica?" },
+        { label: "Federación", text: "¿Es federación real o fallback?" }
       ]
     },
     en: {
       context: "Current language: English. Current demo: Sales Commission Pipeline. Validated context: the heavy pipeline runs outside Vercel; Vercel only consumes precomputed JSON files from public/data. You can explain Bronze → Silver → Gold, Great Expectations with 10/10 checks, Phase 9A Trino healthcheck with SELECT 1 in Codespaces, Phase 9B real SQL over products.parquet staged into memory, Phase 9C federation-style staged fallback, and the difference between direct Delta + SQLite federation and staged fallback. Do not claim direct Delta connector + SQLite connector federation is validated; it remains a future hardening step.",
       initialMessage: "I can explain the Bronze → Silver → Gold architecture, Great Expectations 10/10, Trino in Codespaces and why this web demo uses precomputed JSON files.",
       suggestions: [
-        { label: "Layers", text: "Explain Bronze, Silver and Gold in this pipeline." },
-        { label: "Quality", text: "What does Great Expectations passing 10/10 checks mean?" },
-        { label: "Trino", text: "Explain Trino phases 9A, 9B and 9C in Codespaces." },
-        { label: "Fallback", text: "What is the difference between direct federation and staged fallback?" }
+        { label: "Recruiter", text: "As a recruiter, why does this pipeline matter?" },
+        { label: "Business", text: "Explain this for business" },
+        { label: "Technical", text: "What is the most technical part?" },
+        { label: "Federation", text: "Is this real federation or fallback?" }
       ]
     }
   }
