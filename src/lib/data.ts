@@ -746,21 +746,23 @@ export const demoChatContexts = {
   pipeline: {
     title: "Sales Commission Pipeline",
     es: {
-      context: "Idioma actual: español. Demo actual: Sales Commission Pipeline. Puedo explicarte la arquitectura Bronze → Silver → Gold, PySpark, Delta Lake, Great Expectations, el export JSON y cómo se conecta con este demo web.",
-      initialMessage: "Puedo explicarte la arquitectura Bronze → Silver → Gold, PySpark, Delta Lake, Great Expectations, el export JSON y cómo se conecta con este demo web.",
+      context: "Idioma actual: español. Demo actual: Sales Commission Pipeline. Contexto validado: el pipeline pesado corre fuera de Vercel; Vercel solo consume JSONs precomputados desde public/data. Puedes explicar Bronze → Silver → Gold, Great Expectations con 10/10 checks, Fase 9A Trino healthcheck con SELECT 1 en Codespaces, Fase 9B SQL real sobre products.parquet stageado en memory, Fase 9C federation-style staged fallback, y la diferencia entre federación directa Delta + SQLite y staged fallback. No digas que la federación directa Delta connector + SQLite connector ya está validada; queda como hardening futuro.",
+      initialMessage: "Puedo explicarte la arquitectura Bronze → Silver → Gold, Great Expectations 10/10, Trino en Codespaces y por qué este demo web usa JSONs precomputados.",
       suggestions: [
         { label: "Capas", text: "Explícame Bronze, Silver y Gold en este pipeline." },
-        { label: "Calidad", text: "¿Qué validaciones de calidad usa?" },
-        { label: "JSON", text: "¿Por qué este demo usa JSON precomputado?" }
+        { label: "Calidad", text: "¿Qué significa que Great Expectations pasó 10/10 checks?" },
+        { label: "Trino", text: "Explícame las fases 9A, 9B y 9C de Trino en Codespaces." },
+        { label: "Fallback", text: "¿Cuál es la diferencia entre federación directa y staged fallback?" }
       ]
     },
     en: {
-      context: "Current language: English. Current demo: Sales Commission Pipeline. I can explain the Bronze → Silver → Gold architecture, PySpark, Delta Lake, Great Expectations, JSON export and how it connects to this web demo.",
-      initialMessage: "I can explain the Bronze → Silver → Gold architecture, PySpark, Delta Lake, Great Expectations, JSON export and how it connects to this web demo.",
+      context: "Current language: English. Current demo: Sales Commission Pipeline. Validated context: the heavy pipeline runs outside Vercel; Vercel only consumes precomputed JSON files from public/data. You can explain Bronze → Silver → Gold, Great Expectations with 10/10 checks, Phase 9A Trino healthcheck with SELECT 1 in Codespaces, Phase 9B real SQL over products.parquet staged into memory, Phase 9C federation-style staged fallback, and the difference between direct Delta + SQLite federation and staged fallback. Do not claim direct Delta connector + SQLite connector federation is validated; it remains a future hardening step.",
+      initialMessage: "I can explain the Bronze → Silver → Gold architecture, Great Expectations 10/10, Trino in Codespaces and why this web demo uses precomputed JSON files.",
       suggestions: [
         { label: "Layers", text: "Explain Bronze, Silver and Gold in this pipeline." },
-        { label: "Quality", text: "What quality checks are used?" },
-        { label: "JSON", text: "Why does this demo use precomputed JSON?" }
+        { label: "Quality", text: "What does Great Expectations passing 10/10 checks mean?" },
+        { label: "Trino", text: "Explain Trino phases 9A, 9B and 9C in Codespaces." },
+        { label: "Fallback", text: "What is the difference between direct federation and staged fallback?" }
       ]
     }
   }
