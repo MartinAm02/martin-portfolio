@@ -1316,6 +1316,81 @@ button, input {
 .class-b { background: var(--blue-dim); color: var(--blue); }
 .class-c { background: var(--green-dim); color: var(--green); }
 
+.abc-page > section {
+  margin-top: 18px;
+}
+
+.abc-business-panel p,
+.abc-recommendation p {
+  white-space: pre-line;
+}
+
+.abc-main-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.abc-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.abc-toolbar label,
+.abc-select-field {
+  color: var(--text2);
+  display: grid;
+  font-size: 11px;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.abc-toolbar select,
+.abc-select-field select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  min-width: 150px;
+  padding: 9px 10px;
+}
+
+.abc-table-wrap {
+  overflow-x: auto;
+}
+
+.abc-analysis-table {
+  min-width: 720px;
+}
+
+.abc-analysis-table td:first-child {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.abc-recommendation {
+  border-color: rgba(232, 160, 48, 0.24);
+}
+
+.abc-whatif {
+  display: grid;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.abc-whatif h3 {
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.abc-scenario-grid .metric strong {
+  font-size: 15px;
+}
+
+.abc-class-result .class-pill {
+  font-size: 12px;
+}
+
 .pipeline-page {
   max-width: 1180px;
 }

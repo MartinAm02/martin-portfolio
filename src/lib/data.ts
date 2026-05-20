@@ -90,6 +90,8 @@ export type IrisDemoContent = {
 export type AbcProduct = {
   name: string;
   revenue: number;
+  annualDemand?: number;
+  unitCost?: number;
 };
 
 export type AbcDemoContent = {
@@ -395,11 +397,13 @@ export const abcDemoContent: AbcDemoContent = {
   title: "ABC Analysis",
   description: "Edit product revenue and see the Pareto classes update immediately for an inventory or commercial portfolio.",
   products: [
-    { name: "Analytics Platform", revenue: 82000 },
-    { name: "Forecasting Add-on", revenue: 54000 },
-    { name: "Support Retainer", revenue: 28000 },
-    { name: "Data Migration", revenue: 18000 },
-    { name: "Training Pack", revenue: 9000 }
+    { name: "Dental implants", annualDemand: 420, unitCost: 210, revenue: 88200 },
+    { name: "Orthodontic brackets", annualDemand: 860, unitCost: 72, revenue: 61920 },
+    { name: "Composite resin kits", annualDemand: 720, unitCost: 48, revenue: 34560 },
+    { name: "Anesthetic cartridges", annualDemand: 1500, unitCost: 18, revenue: 27000 },
+    { name: "Sterilization pouches", annualDemand: 2400, unitCost: 7, revenue: 16800 },
+    { name: "Disposable suction tips", annualDemand: 3200, unitCost: 3, revenue: 9600 },
+    { name: "Polishing discs", annualDemand: 900, unitCost: 8, revenue: 7200 }
   ]
 };
 
@@ -725,21 +729,23 @@ export const demoChatContexts = {
   abc: {
     title: "ABC Analysis",
     es: {
-      context: "Idioma actual: español. Demo actual: ABC Analysis. Puedo explicarte el análisis ABC, el principio de Pareto, la segmentación A/B/C y cómo se usa para decisiones de inventario.",
-      initialMessage: "Puedo explicarte el análisis ABC, el principio de Pareto, la segmentación A/B/C y cómo se usa para decisiones de inventario.",
+      context: "Idioma actual: español. Demo actual: ABC Analysis. Contexto: este demo replica un módulo de gestión de inventario para Valora Consultoría de Datos con un catálogo simulado de insumos odontológicos. Puedes explicar qué es ABC analysis, el principio de Pareto, diferencias entre Clase A, B y C, recomendaciones por clase, el escenario what-if de sensibilidad de demanda, y cómo se conecta con inventario, compras, abastecimiento, stock de seguridad y operación. No afirmes que está desplegado en clínicas reales.",
+      initialMessage: "Puedo explicarte el análisis ABC, Pareto, clases A/B/C, recomendaciones por clase y el escenario what-if para inventario.",
       suggestions: [
         { label: "ABC", text: "¿Qué es el análisis ABC?" },
-        { label: "Pareto", text: "¿Cómo funciona el principio de Pareto aquí?" },
-        { label: "Inventario", text: "¿Cómo ayuda a decisiones de inventario?" }
+        { label: "Clases", text: "¿Cuál es la diferencia entre productos A, B y C?" },
+        { label: "What-if", text: "¿Cómo interpreto el escenario what-if de demanda?" },
+        { label: "Valora", text: "¿Cómo se conecta este módulo con inventario y compras en Valora?" }
       ]
     },
     en: {
-      context: "Current language: English. Current demo: ABC Analysis. I can explain ABC analysis, the Pareto principle, A/B/C segmentation and how it supports inventory decisions.",
-      initialMessage: "I can explain ABC analysis, the Pareto principle, A/B/C segmentation and how it supports inventory decisions.",
+      context: "Current language: English. Current demo: ABC Analysis. Context: this demo replicates an inventory management module for Valora Data Consulting using a simulated dental supplies catalog. You can explain ABC analysis, the Pareto principle, differences between Class A, B and C, recommendations by class, the demand sensitivity what-if scenario, and how it connects to inventory, procurement, safety stock and operations. Do not claim it is deployed in real clinics.",
+      initialMessage: "I can explain ABC analysis, Pareto, A/B/C classes, class-based recommendations and the inventory what-if scenario.",
       suggestions: [
         { label: "ABC", text: "What is ABC analysis?" },
-        { label: "Pareto", text: "How does Pareto segmentation work here?" },
-        { label: "Inventory", text: "How would this help inventory decisions?" }
+        { label: "Classes", text: "What is the difference between Class A, B and C products?" },
+        { label: "What-if", text: "How should I interpret the demand what-if scenario?" },
+        { label: "Valora", text: "How does this module connect to inventory and procurement at Valora?" }
       ]
     }
   },
