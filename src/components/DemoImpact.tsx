@@ -1,4 +1,4 @@
-import type { DemoImpactContent, ImpactAudience } from "@/lib/demoPrompts";
+import type { DemoImpactContent, ImpactAudience } from "@/lib/demoChatGuidance";
 
 const audienceOrder: ImpactAudience[] = ["recruiters", "dataLeaders", "technicalTeams", "business"];
 

@@ -6,7 +6,7 @@ import { FloatingDemoChat } from "@/components/ChatPanel";
 import { DemoImpact } from "@/components/DemoImpact";
 import { ThemeControls } from "@/components/ThemeControls";
 import { chatContent, demoChatContexts, irisDemoContent, type Locale } from "@/lib/data";
-import { demoImpactContent, IRIS_DEMO_PROMPT } from "@/lib/demoPrompts";
+import { demoImpactContent, IRIS_DEMO_PROMPT } from "@/lib/demoChatGuidance";
 
 type IrisClass = "setosa" | "versicolor" | "virginica";
 

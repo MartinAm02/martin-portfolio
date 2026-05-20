@@ -140,7 +140,6 @@ export type LocalizedContent = {
     aiStatus: string;
     languageLabel: string;
     coursesLabel: string;
-    nextCert: string;
     progress: string;
     themeLabel: string;
     dark: string;
@@ -437,7 +436,6 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       aiStatus: "IA activa",
       languageLabel: "Idioma",
       coursesLabel: "Cursos",
-      nextCert: "Siguiente certificación próximamente",
       progress: "Progreso",
       themeLabel: "Tema",
       dark: "Oscuro",
@@ -582,7 +580,6 @@ export const localizedContent: Record<Locale, LocalizedContent> = {
       aiStatus: "AI active",
       languageLabel: "Language",
       coursesLabel: "Courses",
-      nextCert: "Next certification coming soon",
       progress: "Progress",
       themeLabel: "Theme",
       dark: "Dark",

@@ -161,43 +161,22 @@ function ExperienceSection({ locale }: { locale: Locale }) {
 function CertificationsSection({ locale }: { locale: Locale }) {
   const content = localizedContent[locale];
   const cert = certifications[0];
+  const certStatus = cert.status === "in-progress" ? content.certificationStatus.inProgress : content.certificationStatus.completed;
 
   return (
     <section id="certifications">
       <SectionHeader title={content.sections.certifications} />
-      <div className="cert-grid">
-        <article className="cc featured">
-          <div className="cc-in">
-            <div className="cc-top">
-              <div className="cc-logo">AWS</div>
-              <div className="cc-iss">{cert.issuer}</div>
+      <div className="courses">
+        <article className="course-card cert-compact">
+          <div className="course-dot amber" />
+          <div>
+            <h3 className="course-name">AWS Cloud Practitioner</h3>
+            <div className="course-platform">{cert.issuer}</div>
+            <div className="co-tags">
+              <span className="badge b-amber">{certStatus}</span>
             </div>
-            <h3 className="cc-name">{cert.name}</h3>
-            <div className="cc-meta">
-              <span className="badge b-amber">
-                {cert.status === "in-progress" ? content.certificationStatus.inProgress : content.certificationStatus.completed}
-              </span>
-              <span className="cc-date">{content.certificationDate}</span>
-            </div>
-            {typeof cert.progress === "number" && (
-              <div className="progress">
-                <div className="progress-row">
-                  <span>{content.ui.progress}</span>
-                  <strong>{cert.progress}%</strong>
-                </div>
-                <div className="progress-track">
-                  <div className="progress-fill" style={{ width: `${cert.progress}%` }} />
-                </div>
-              </div>
-            )}
           </div>
         </article>
-        <article className="cc empty-card">
-          <div className="empty-plus">+</div>
-          <div>{content.ui.nextCert}</div>
-        </article>
-      </div>
-      <div className="courses">
         <div className="course-label">{content.ui.coursesLabel}</div>
         {content.courses.map((course) => (
           <article className="course-card" key={course.name}>

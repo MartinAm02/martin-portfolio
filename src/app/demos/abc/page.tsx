@@ -6,7 +6,7 @@ import { FloatingDemoChat } from "@/components/ChatPanel";
 import { DemoImpact } from "@/components/DemoImpact";
 import { ThemeControls } from "@/components/ThemeControls";
 import { abcDemoContent, type AbcProduct, chatContent, demoChatContexts, type Locale } from "@/lib/data";
-import { ABC_DEMO_PROMPT, demoImpactContent } from "@/lib/demoPrompts";
+import { ABC_DEMO_PROMPT, demoImpactContent } from "@/lib/demoChatGuidance";
 
 type AbcFilter = "ALL" | "A" | "B" | "C";
 type AbcClass = "A" | "B" | "C";
